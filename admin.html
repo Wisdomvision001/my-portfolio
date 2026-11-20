@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Lead Management — WISDOM AUDI UNIVERSE</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cg transform='rotate(-30 12 12)'%3E%3Ccircle cx='7.3' cy='3.2' r='1.45'/%3E%3Crect x='5.5' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Crect x='14.9' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Ccircle cx='16.7' cy='20.8' r='1.45'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- Auth Gate -->
+  <main id="admin-login-view" class="auth-shell" hidden>
+    <div class="auth-card">
+      <div class="auth-brand">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <g transform="rotate(-30 12 12)">
+            <circle cx="7.3" cy="3.2" r="1.45"/>
+            <rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+            <rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+            <circle cx="16.7" cy="20.8" r="1.45"/>
+          </g>
+        </svg>
+        <span>WISDOM AUDI UNIVERSE</span>
+      </div>
+      <h1 class="auth-title">Internal Lead <em>Management</em></h1>
+      <p class="auth-sub">Enter the server admin access key to inspect consultation enquiries, manage follow-up status, and review model performance.</p>
+
+      <form id="admin-login-form" class="auth-form" novalidate>
+        <div class="field-group">
+          <label for="admin-access-key">Access key</label>
+          <input id="admin-access-key" name="accessKey" type="password" autocomplete="current-password" placeholder="Enter admin access key" required>
+        </div>
+        <div id="admin-login-error" class="form-msg is-error" role="alert"></div>
+        <button type="submit" id="admin-login-btn" class="btn-primary">Sign In</button>
+      </form>
+
+      <div class="auth-footer">
+        <a href="index.html" class="quiet-link">Return to public website</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Authenticated Workspace -->
+  <div id="admin-app-view" class="app-shell" hidden>
+    <header class="topbar">
+      <div class="topbar-left">
+        <a href="index.html" class="topbar-brand" title="Open public website">WISDOM AUDI UNIVERSE</a>
+        <span class="topbar-sep" aria-hidden="true">/</span>
+        <span class="topbar-crumb">Lead Management</span>
+      </div>
+
+      <nav class="topbar-views" aria-label="Workspace views">
+        <button type="button" class="view-tab active" data-view="leads">Enquiries</button>
+        <button type="button" class="view-tab" data-view="emails">Email Delivery</button>
+        <button type="button" class="view-tab" data-view="performance">Model Performance</button>
+      </nav>
+
+      <div class="topbar-actions">
+        <button type="button" id="export-csv-btn" class="btn-secondary">Export CSV</button>
+        <button type="button" id="logout-btn" class="btn-secondary">Sign Out</button>
+      </div>
+    </header>
+
+    <!-- View 1: Lead Management -->
+    <main id="view-leads" class="workspace-main">
+      <section class="kpi-strip" aria-label="Lead overview">
+        <div class="kpi-cell">
+          <div class="kpi-label">Total Enquiries</div>
+          <div id="kpi-total" class="kpi-value tabular-nums">0</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">New / Unreviewed</div>
+          <div id="kpi-new" class="kpi-value tabular-nums">0</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">Contacted</div>
+          <div id="kpi-contacted" class="kpi-value tabular-nums">0</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">Qualified &amp; Proposal</div>
+          <div id="kpi-pipeline" class="kpi-value tabular-nums">0</div>
+        </div>
+      </section>
+
+      <section class="toolbar" aria-label="Filter leads">
+        <div class="status-tabs" role="tablist" aria-label="Lead status filter">
+          <button type="button" class="seg-btn active" data-status="all">All</button>
+          <button type="button" class="seg-btn" data-status="new">New</button>
+          <button type="button" class="seg-btn" data-status="contacted">Contacted</button>
+          <button type="button" class="seg-btn" data-status="qualified">Qualified</button>
+          <button type="button" class="seg-btn" data-status="proposal">Proposal</button>
+          <button type="button" class="seg-btn" data-status="closed">Closed</button>
+          <button type="button" class="seg-btn" data-status="archived">Archived</button>
+        </div>
+
+        <div class="toolbar-inputs">
+          <select id="filter-industry" aria-label="Filter by industry">
+            <option value="all">All industries</option>
+          </select>
+          <input id="filter-search" type="search" placeholder="Search name, business, email, ref..." aria-label="Search leads">
+          <button type="button" id="refresh-leads-btn" class="btn-secondary">Refresh</button>
+        </div>
+      </section>
+
+      <div class="split-grid">
+        <section class="table-pane" aria-label="Consultation enquiries table">
+          <div id="leads-error-banner" class="banner-error" hidden></div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Contact &amp; Business</th>
+                  <th>Industry</th>
+                  <th>Requested Service</th>
+                  <th>Email Delivery</th>
+                  <th>Submitted</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="leads-tbody"></tbody>
+            </table>
+          </div>
+
+          <div id="leads-empty" class="empty-state" hidden>
+            <p class="empty-title">No enquiries match this view.</p>
+            <p class="empty-sub">When visitors submit consultation requests through Wisdom AI, they appear here immediately.</p>
+            <button type="button" id="reset-filters-btn" class="btn-secondary">Reset Filters</button>
+          </div>
+        </section>
+
+        <aside id="lead-inspector" class="inspector-pane" aria-label="Selected lead details">
+          <div id="inspector-placeholder" class="inspector-empty">
+            Select an enquiry row to review customer details, discovery notes, status, and follow-up actions.
+          </div>
+
+          <div id="inspector-content" hidden>
+            <div class="inspector-head">
+              <div>
+                <div id="det-ref" class="mono-ref tabular-nums"></div>
+                <h2 id="det-business" class="det-title"></h2>
+                <p id="det-meta" class="det-meta"></p>
+              </div>
+            </div>
+
+            <dl class="det-grid">
+              <div>
+                <dt>Customer</dt>
+                <dd id="det-name"></dd>
+              </div>
+              <div>
+                <dt>Email</dt>
+                <dd><a id="det-email" class="det-link" href="#"></a></dd>
+              </div>
+              <div>
+                <dt>Industry</dt>
+                <dd id="det-industry"></dd>
+              </div>
+              <div>
+                <dt>Requested Service</dt>
+                <dd id="det-service"></dd>
+              </div>
+              <div>
+                <dt>Interest Level</dt>
+                <dd id="det-interest"></dd>
+              </div>
+              <div>
+                <dt>Agency Notification</dt>
+                <dd id="det-notify"></dd>
+              </div>
+              <div>
+                <dt>Customer Confirmation</dt>
+                <dd id="det-cust-notify"></dd>
+              </div>
+              <div>
+                <dt>Services Catalogue</dt>
+                <dd id="det-cat-notify"></dd>
+              </div>
+            </dl>
+
+            <div class="det-section">
+              <div class="det-label">Enquiry Summary</div>
+              <p id="det-challenge" class="det-prose"></p>
+            </div>
+
+            <div id="det-outcome-wrap" class="det-section" hidden>
+              <div class="det-label">Desired Outcome</div>
+              <p id="det-outcome" class="det-prose"></p>
+            </div>
+
+            <div id="det-discovery-wrap" class="det-section" hidden>
+              <div class="det-label">AI Discovery Notes</div>
+              <p id="det-discovery" class="det-prose"></p>
+            </div>
+
+            <form id="lead-update-form" class="det-form">
+              <div class="field-group">
+                <label for="det-status-select">Lead Status</label>
+                <select id="det-status-select" name="status">
+                  <option value="new">New</option>
+                  <option value="contacted">Contacted</option>
+                  <option value="qualified">Qualified</option>
+                  <option value="proposal">Proposal</option>
+                  <option value="closed">Closed</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="det-notes-input">Follow-up Notes</label>
+                <textarea id="det-notes-input" name="followUpNotes" rows="4" placeholder="Record discovery call outcomes, next steps, or proposal scope..."></textarea>
+              </div>
+
+              <div id="det-save-status" class="form-msg" role="status" aria-live="polite"></div>
+
+              <div class="det-actions">
+                <button type="submit" id="det-save-btn" class="btn-primary">Save Changes</button>
+                <a id="det-mailto-btn" class="btn-secondary" href="#">Email Contact</a>
+                <button type="button" id="det-delete-btn" class="btn-danger">Delete</button>
+              </div>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <!-- View 2: Model Performance -->
+    <main id="view-performance" class="workspace-main" hidden>
+      <section class="perf-header">
+        <div>
+          <h1 class="perf-title">Model Verification &amp; Latency</h1>
+          <p class="perf-sub">Privacy-safe performance telemetry across chat turns. Conversation text is never logged.</p>
+        </div>
+        <button type="button" id="run-benchmark-btn" class="btn-primary">Run Live Benchmark</button>
+      </section>
+
+      <section class="kpi-strip" aria-label="Chat performance summary">
+        <div class="kpi-cell">
+          <div class="kpi-label">Primary Model</div>
+          <div id="perf-primary" class="kpi-value kpi-mono">—</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">Avg Time to First Token</div>
+          <div id="perf-ttft" class="kpi-value tabular-nums">—</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">Avg Total Duration</div>
+          <div id="perf-total" class="kpi-value tabular-nums">—</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">Fallback Invocations</div>
+          <div id="perf-fallbacks" class="kpi-value tabular-nums">0</div>
+        </div>
+      </section>
+
+      <section id="benchmark-output" class="bench-section" hidden>
+        <h2 class="section-subtitle">Latest Live Benchmark Results</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Thinking Level</th>
+                <th>Tool Calling</th>
+                <th>Status</th>
+                <th>TTFT</th>
+                <th>Total Time</th>
+              </tr>
+            </thead>
+            <tbody id="benchmark-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="bench-section">
+        <h2 class="section-subtitle">Recent Recorded Chat Requests</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Model</th>
+                <th>Thinking</th>
+                <th>TTFT</th>
+                <th>Total</th>
+                <th>Tool</th>
+                <th>Outcome</th>
+              </tr>
+            </thead>
+            <tbody id="metrics-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- View 3: Email Delivery & Configuration -->
+    <main id="view-emails" class="workspace-main" hidden>
+      <section class="perf-header">
+        <div>
+          <h1 class="perf-title">Email Delivery &amp; Retention</h1>
+          <p class="perf-sub">Tracks customer confirmations, agency lead alerts, services catalogues, transport status (Gmail SMTP / Resend), and duplicate prevention.</p>
+        </div>
+        <button type="button" id="refresh-emails-btn" class="btn-secondary">Refresh Logs</button>
+      </section>
+
+      <section class="kpi-strip" aria-label="Email configuration summary">
+        <div class="kpi-cell">
+          <div class="kpi-label">Active Sender</div>
+          <div id="email-cfg-from" class="kpi-value kpi-mono">—</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">Agency Recipient</div>
+          <div id="email-cfg-to" class="kpi-value kpi-mono">—</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">Sending Mode</div>
+          <div id="email-cfg-mode" class="kpi-value kpi-mono">—</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">Retention Window</div>
+          <div id="email-cfg-retention" class="kpi-value tabular-nums">—</div>
+        </div>
+      </section>
+
+      <div id="email-cfg-warning" class="banner-error" hidden></div>
+
+      <section class="bench-section">
+        <h2 class="section-subtitle">Email Delivery &amp; Deduplication Audit Log</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Ref ID</th>
+                <th>Email Type</th>
+                <th>Recipient</th>
+                <th>Status</th>
+                <th>Provider ID</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
+            <tbody id="email-logs-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

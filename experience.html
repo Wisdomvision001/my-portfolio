@@ -1,55 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Experience — Wisdom Audi</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="experience.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How It Works — WISDOM AUDI UNIVERSE</title>
+  <meta name="description" content="Our three-step process for designing, building, and deploying AI business automation systems.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cg transform='rotate(-30 12 12)'%3E%3Ccircle cx='7.3' cy='3.2' r='1.45'/%3E%3Crect x='5.5' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Crect x='14.9' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Ccircle cx='16.7' cy='20.8' r='1.45'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+  <style>
+    html, body { background: #000000 !important; color: #ffffff; }
+  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-<nav>
-  <div class="wrap">
-    <div class="logo"><a href="index.html">Wisdom<span>.</span>Audi</a></div>
-    <div class="nav-links">
-      <a href="index.html#about">About</a>
-      <a href="index.html#skills">Skills</a>
-      <a href="index.html#experience">Experience</a>
-      <a href="index.html#projects">Projects</a>
-      <a href="index.html#education">Education</a>
-      <a href="index.html#contact">Contact</a>
-    </div>
-    <a href="index.html#contact" class="nav-cta">Get in touch</a>
+<body style="background:#000;color:#fff">
+  <div class="scroll-progress" aria-hidden="true">
+    <div id="scroll-progress-bar" class="scroll-progress-bar"></div>
   </div>
-</nav>
-<section id="experience">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="section-tag">// 03 — EXPERIENCE</span>
-      <h2>Where I've worked.</h2>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="menu-backdrop" id="menu-backdrop" aria-hidden="true"></div>
+
+  <header class="header" id="site-header">
+    <a href="index.html" class="logo" aria-label="Wisdom Audi Universe Home">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <g transform="rotate(-30 12 12)">
+          <circle cx="7.3" cy="3.2" r="1.45"/>
+          <rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+          <rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+          <circle cx="16.7" cy="20.8" r="1.45"/>
+        </g>
+      </svg>
+      <span class="logo-text">WISDOM AUDI <span class="logo-suffix">UNIVERSE</span></span>
+    </a>
+
+    <nav class="nav" id="site-nav" aria-label="Primary">
+      <a href="index.html#solutions" class="nav-pill">AI Solutions</a>
+      <a href="index.html#industries" class="nav-pill">Industries</a>
+      <a href="index.html#process" class="nav-pill active">How It Works</a>
+      <a href="projects.html" class="nav-pill">Our Work</a>
+    </nav>
+
+    <div class="header-right">
+      <a href="contact.html" class="btn btn-solid header-cta">Let's Talk</a>
+      <button
+        type="button"
+        class="burger"
+        id="menu-toggle"
+        aria-controls="site-nav"
+        aria-expanded="false"
+        aria-label="Open menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
-    <div data-reveal>
-      <div class="timeline-item">
-        <div class="when mono">2025 — Present</div>
-        <div>
-          <h3>Junior Developer, Data Analyst &amp; Graphics Designer</h3>
-          <div class="role-org">Zonus Global Concept Limited</div>
-          <p>Develop and maintain web applications, create posters, flyers, logos, and brand design materials, perform basic data analysis, and edit photos for marketing and branding purposes.</p>
+  </header>
+
+  <main id="main-content">
+    <section class="section-block" style="padding-top: 72px;">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="section-label">How It Works</span>
+          <h1 class="section-heading">From manual bottleneck to automated <em>system</em> in three steps.</h1>
+          <p class="section-sub">Focused delivery built around measurable operational clarity.</p>
+        </div>
+
+        <div class="process-row" data-reveal>
+          <article class="process-item">
+            <span class="process-step-num mono">01</span>
+            <h3>Audit &amp; System Design</h3>
+            <p>Identify high-friction workflows and map the exact AI agents and system architecture needed.</p>
+          </article>
+          <article class="process-item">
+            <span class="process-step-num mono">02</span>
+            <h3>Build &amp; Integration</h3>
+            <p>Engineer custom AI assistants, automated pipelines, and supporting web applications wired to your tools.</p>
+          </article>
+          <article class="process-item">
+            <span class="process-step-num mono">03</span>
+            <h3>Deploy &amp; Scale</h3>
+            <p>Launch production systems with clear documentation and room to expand as operations grow.</p>
+          </article>
         </div>
       </div>
-      <div class="timeline-item">
-        <div class="when mono">2022 — Present</div>
-        <div>
-          <h3>B.Sc. Computer Science Student</h3>
-          <div class="role-org">Modibbo Adama University</div>
-          <p>Studying alongside professional work, applying coursework directly to live projects — including the Lifeguard360 emergency response system proposal.</p>
-        </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a href="index.html" class="logo" aria-label="Wisdom Audi Universe Home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <g transform="rotate(-30 12 12)">
+            <circle cx="7.3" cy="3.2" r="1.45"/>
+            <rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+            <rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+            <circle cx="16.7" cy="20.8" r="1.45"/>
+          </g>
+        </svg>
+        <span class="logo-text">WISDOM AUDI <span class="logo-suffix">UNIVERSE</span></span>
+      </a>
+
+      <div class="footer-links">
+        <a href="index.html#solutions">AI Solutions</a>
+        <a href="index.html#industries">Industries</a>
+        <a href="index.html#process">How It Works</a>
+        <a href="projects.html">Our Work</a>
+        <a href="contact.html">Contact</a>
       </div>
+
+      <span class="footer-copy">© 2026 Wisdom Audi Universe</span>
     </div>
-  </div>
-</section>
-<footer>WISDOM AUDI — © 2026 — BUILT FROM YOLA, NIGERIA</footer>
-<script src="script.js"></script>
+  </footer>
+  <script src="script.js"></script>
 </body>
 </html>

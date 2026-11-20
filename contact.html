@@ -1,41 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact — Wisdom Audi</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="contact.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — WISDOM AUDI UNIVERSE</title>
+  <meta name="description" content="Start transforming your business operations with AI agents, workflow automation, and digital infrastructure.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cg transform='rotate(-30 12 12)'%3E%3Ccircle cx='7.3' cy='3.2' r='1.45'/%3E%3Crect x='5.5' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Crect x='14.9' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Ccircle cx='16.7' cy='20.8' r='1.45'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+  <style>
+    html, body { background: #000000 !important; color: #ffffff; }
+  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-<nav>
-  <div class="wrap">
-    <div class="logo"><a href="index.html">Wisdom<span>.</span>Audi</a></div>
-    <div class="nav-links">
-      <a href="index.html#about">About</a>
-      <a href="index.html#skills">Skills</a>
-      <a href="index.html#experience">Experience</a>
-      <a href="index.html#projects">Projects</a>
-      <a href="index.html#education">Education</a>
-      <a href="index.html#contact">Contact</a>
-    </div>
-    <a href="index.html#contact" class="nav-cta">Get in touch</a>
+<body style="background:#000;color:#fff">
+  <div class="scroll-progress" aria-hidden="true">
+    <div id="scroll-progress-bar" class="scroll-progress-bar"></div>
   </div>
-</nav>
-<section id="contact" class="contact-section">
-  <div class="wrap">
-    <span class="section-tag">// 07 — CONTACT</span>
-    <h2>Let's build something worth shipping.</h2>
-    <p>Open to frontend, data, and design roles — remote or based in Nigeria.</p>
-    <div class="contact-links">
-      <a href="mailto:audiwisdom4@gmail.com" class="btn btn-primary">Email me</a>
-      <a href="https://www.linkedin.com/in/wisdom-audi-57026b344/" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
-      <a href="https://github.com/wisdomvision001" target="_blank" rel="noopener" class="btn btn-ghost" id="github">GitHub</a>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="menu-backdrop" id="menu-backdrop" aria-hidden="true"></div>
+
+  <header class="header" id="site-header">
+    <a href="index.html" class="logo" aria-label="Wisdom Audi Universe Home">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <g transform="rotate(-30 12 12)">
+          <circle cx="7.3" cy="3.2" r="1.45"/>
+          <rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+          <rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+          <circle cx="16.7" cy="20.8" r="1.45"/>
+        </g>
+      </svg>
+      <span class="logo-text">WISDOM AUDI <span class="logo-suffix">UNIVERSE</span></span>
+    </a>
+
+    <nav class="nav" id="site-nav" aria-label="Primary">
+      <a href="index.html#solutions" class="nav-pill">AI Solutions</a>
+      <a href="index.html#industries" class="nav-pill">Industries</a>
+      <a href="index.html#process" class="nav-pill">How It Works</a>
+      <a href="projects.html" class="nav-pill">Our Work</a>
+    </nav>
+
+    <div class="header-right">
+      <a href="contact.html" class="btn btn-solid header-cta">Let's Talk</a>
+      <button
+        type="button"
+        class="burger"
+        id="menu-toggle"
+        aria-controls="site-nav"
+        aria-expanded="false"
+        aria-label="Open menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
-  </div>
-</section>
-<footer>WISDOM AUDI — © 2026 — BUILT FROM YOLA, NIGERIA</footer>
-<script src="script.js"></script>
+  </header>
+
+  <main id="main-content">
+    <section class="section-block" style="padding-top: 72px;">
+      <div class="container">
+        <div class="contact-layout">
+          <div data-reveal>
+            <span class="section-label">Start Transforming</span>
+            <h1 class="section-heading">Ready for an <em>intelligent</em> operation?</h1>
+            <p class="section-sub">Tell us what slows your business down. We will design and build the AI agents, workflows, or digital systems to move it forward.</p>
+
+            <div class="contact-links">
+              <div class="contact-row">
+                <span class="contact-k">Email</span>
+                <a href="mailto:wisdomaudiuniverse@gmail.com" class="contact-v">wisdomaudiuniverse@gmail.com</a>
+              </div>
+              <div class="contact-row">
+                <span class="contact-k">GitHub</span>
+                <a href="https://github.com/Wisdomvision001/" target="_blank" rel="noopener noreferrer" class="contact-v">github.com/Wisdomvision001</a>
+              </div>
+              <div class="contact-row">
+                <span class="contact-k">LinkedIn</span>
+                <a href="https://www.linkedin.com/in/wisdom-audi-57026b344" target="_blank" rel="noopener noreferrer" class="contact-v">linkedin.com/in/wisdom-audi-57026b344</a>
+              </div>
+            </div>
+
+            <div class="hero-actions" style="justify-content: flex-start; margin-top: 24px;">
+              <a href="mailto:wisdomaudiuniverse@gmail.com" class="btn btn-solid">Email Directly</a>
+              <button type="button" id="copy-email-btn" class="btn btn-ghost">Copy Email</button>
+            </div>
+            <p id="copy-email-status" class="copy-status" aria-live="polite"></p>
+          </div>
+
+          <div class="contact-card" data-reveal>
+            <form id="contact-form" class="contact-form" novalidate>
+              <div class="form-field">
+                <label for="contact-name" class="form-label">Name</label>
+                <input id="contact-name" name="name" type="text" class="form-input" placeholder="Your full name" required>
+                <span id="error-name" class="form-error" aria-live="polite"></span>
+              </div>
+
+              <div class="form-field">
+                <label for="contact-email" class="form-label">Work Email</label>
+                <input id="contact-email" name="email" type="email" class="form-input" placeholder="you@company.com" required>
+                <span id="error-email" class="form-error" aria-live="polite"></span>
+              </div>
+
+              <div class="form-field">
+                <label for="contact-subject" class="form-label">Focus Area (Optional)</label>
+                <input id="contact-subject" name="subject" type="text" class="form-input" placeholder="AI agents, customer support, workflow automation">
+              </div>
+
+              <div class="form-field">
+                <label for="contact-message" class="form-label">What would you like to automate?</label>
+                <textarea id="contact-message" name="message" class="form-textarea" placeholder="Briefly describe your workflow or goal..." required></textarea>
+                <span id="error-message" class="form-error" aria-live="polite"></span>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-solid">Request Discovery Brief</button>
+              </div>
+
+              <div id="form-feedback" class="form-feedback" role="status" aria-live="polite">
+                <p id="form-feedback-text"></p>
+                <div class="form-feedback-actions">
+                  <a id="feedback-mailto-btn" href="mailto:wisdomaudiuniverse@gmail.com" class="btn btn-solid btn-compact">Open Email App</a>
+                  <button type="button" id="feedback-copy-btn" class="btn btn-ghost btn-compact">Copy Brief</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a href="index.html" class="logo" aria-label="Wisdom Audi Universe Home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <g transform="rotate(-30 12 12)">
+            <circle cx="7.3" cy="3.2" r="1.45"/>
+            <rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+            <rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+            <circle cx="16.7" cy="20.8" r="1.45"/>
+          </g>
+        </svg>
+        <span class="logo-text">WISDOM AUDI <span class="logo-suffix">UNIVERSE</span></span>
+      </a>
+
+      <div class="footer-links">
+        <a href="index.html#solutions">AI Solutions</a>
+        <a href="index.html#industries">Industries</a>
+        <a href="index.html#process">How It Works</a>
+        <a href="projects.html">Our Work</a>
+        <a href="contact.html">Contact</a>
+      </div>
+
+      <span class="footer-copy">© 2026 Wisdom Audi Universe</span>
+    </div>
+  </footer>
+  <script src="script.js"></script>
 </body>
 </html>

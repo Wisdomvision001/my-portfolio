@@ -1,209 +1,507 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- GitHub Pages deployment -->
+<!-- GitHub Pages & Node static deployment -->
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wisdom Audi — Frontend Developer & Data Analyst</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WISDOM AUDI UNIVERSE — Intelligent Business Automation</title>
+  <meta name="description" content="AI agents. Intelligent workflows. Businesses that work smarter. WISDOM AUDI UNIVERSE builds AI automation systems, intelligent assistants, and digital infrastructure.">
+  <meta property="og:title" content="WISDOM AUDI UNIVERSE — Intelligent Business Automation">
+  <meta property="og:description" content="AI agents. Intelligent workflows. Businesses that work smarter.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cg transform='rotate(-30 12 12)'%3E%3Ccircle cx='7.3' cy='3.2' r='1.45'/%3E%3Crect x='5.5' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Crect x='14.9' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Ccircle cx='16.7' cy='20.8' r='1.45'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+  <style>
+    html, body { background: #000000 !important; color: #ffffff; }
+  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-
-<nav>
-  <div class="wrap">
-    <div class="logo">Wisdom<span>.</span>Audi</div>
-    <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#skills">Skills</a>
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#education">Education</a>
-      <a href="#contact">Contact</a>
-    </div>
-    <a href="#contact" class="nav-cta">Get in touch</a>
+<body style="background:#000;color:#fff">
+  <div class="scroll-progress" aria-hidden="true">
+    <div id="scroll-progress-bar" class="scroll-progress-bar"></div>
   </div>
-</nav>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<section class="hero">
-  <canvas id="grid-canvas"></canvas>
-  <span class="coords mono c1">LAT 9.2035° N — LONG 12.4954° E</span>
-  <span class="coords mono c2">YOLA, ADAMAWA · NG</span>
-  <div class="wrap hero-content">
-    <span class="eyebrow">AVAILABLE FOR NEW OPPORTUNITIES</span>
-    <h1>I build interfaces, read data, and design the <em>space</em> between them.</h1>
-    <p class="lede">Junior Developer, Data Analyst, and Graphics Designer based in Jimeta, Yola, Nigeria — currently at Zonus Global Concept Limited.</p>
-    <div class="hero-cta">
-      <a href="#projects" class="btn btn-primary">View my work</a>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="menu-backdrop" id="menu-backdrop" aria-hidden="true"></div>
+
+  <!-- =====================================================================
+       FIRST-SCREEN CINEMATIC EXPERIENCE (100dvh)
+       ===================================================================== -->
+  <div class="hero-screen" id="top">
+    <div class="hero-atmosphere" aria-hidden="true">
+      <div class="atmo-orb atmo-orb-1"></div>
+      <div class="atmo-orb atmo-orb-2"></div>
+      <div class="atmo-beam"></div>
+      <div class="atmo-horizon"></div>
     </div>
+
+    <header class="header" id="site-header">
+      <a href="#top" class="logo appear appear--scale" style="--d:0.08s" aria-label="Wisdom Audi Universe Home">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <g transform="rotate(-30 12 12)">
+            <circle cx="7.3" cy="3.2" r="1.45"/>
+            <rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+            <rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+            <circle cx="16.7" cy="20.8" r="1.45"/>
+          </g>
+        </svg>
+        <span class="logo-text">WISDOM AUDI <span class="logo-suffix">UNIVERSE</span></span>
+      </a>
+
+      <nav class="nav" id="site-nav" aria-label="Primary">
+        <a href="#solutions" class="nav-pill appear appear--scale" style="--d:0.16s">AI Solutions</a>
+        <a href="#industries" class="nav-pill appear appear--soft" style="--d:0.28s">Industries</a>
+        <a href="#process" class="nav-pill appear appear--scale" style="--d:0.40s">How It Works</a>
+        <a href="#work" class="nav-pill appear appear--soft" style="--d:0.52s">Our Work</a>
+      </nav>
+
+      <div class="header-right">
+        <a href="#contact" class="btn btn-solid header-cta appear appear--scale" style="--d:0.34s">Let's Talk</a>
+        <button
+          type="button"
+          class="burger appear appear--scale"
+          style="--d:0.34s"
+          id="menu-toggle"
+          aria-controls="site-nav"
+          aria-expanded="false"
+          aria-label="Open menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-headline">
+      <div class="hero-copy">
+        <div class="badge appear appear--pop" style="--d:0.22s">
+          <svg class="badge-star" width="18" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2.6C12.55 2.6 12.88 3.15 13.08 4.7c.62 4.7 1.52 5.6 6.22 6.22 1.55.2 2.1.53 2.1 1.08s-.55.88-2.1 1.08c-4.7.62-5.6 1.52-6.22 6.22-.2 1.55-.53 2.1-1.08 2.1s-.88-.55-1.08-2.1c-.62-4.7-1.52-5.6-6.22-6.22C3.15 12.88 2.6 12.55 2.6 12s.55-.88 2.1-1.08c4.7-.62 5.6-1.52 6.22-6.22C11.12 3.15 11.45 2.6 12 2.6Z"/>
+          </svg>
+          <span>INTELLIGENT BUSINESS AUTOMATION</span>
+        </div>
+
+        <h1 id="hero-headline">
+          <span class="headline-line appear appear--mask" style="--d:0.42s">The future of business</span>
+          <span class="headline-line appear appear--mask" style="--d:0.62s">is <em>intelligent.</em></span>
+        </h1>
+
+        <p class="lede appear appear--soft" style="--d:0.82s; animation-duration:1.25s;">
+          AI agents. Intelligent workflows. Businesses that work smarter.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#solutions" class="btn btn-solid hero-btn appear appear--btn" style="--d:0.96s">Explore AI Solutions</a>
+          <a href="#contact" class="btn btn-ghost hero-ghost hero-btn appear appear--side" style="--d:1.10s">Let's Talk</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="stats" aria-label="Agency focus pillars">
+      <div class="stat appear appear--stat" style="--d:1.12s">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="pillL" x1="3" y1="2" x2="14" y2="22" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.38"/>
+              <stop offset="100%" stop-color="#3a3a3a" stop-opacity="0.62"/>
+            </linearGradient>
+            <linearGradient id="pillR" x1="13" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#3a3a3a" stop-opacity="0.38"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0.62"/>
+            </linearGradient>
+          </defs>
+          <rect x="3.4" y="2.6" width="7.2" height="18.8" rx="3.6" fill="url(#pillL)"/>
+          <rect x="13.4" y="2.6" width="7.2" height="18.8" rx="3.6" fill="url(#pillR)"/>
+          <rect x="9.2" y="10.9" width="5.6" height="2.2" rx="1.1" fill="#4a4a4a"/>
+        </svg>
+        <span>AI Agents &amp; Workflow Automation</span>
+      </div>
+
+      <div class="stat appear appear--stat" style="--d:1.28s">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="2.4" y="2.4" width="19.2" height="19.2" rx="6.2" fill="#ffffff"/>
+          <path d="M12 7.1v7.4M8.15 12.35L12 16.2l3.85-3.85" stroke="#111111" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Custom AI &amp; Digital Infrastructure</span>
+      </div>
+
+      <a href="#solutions" class="stat stat-link appear appear--stat" style="--d:1.44s">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9.5" stroke="rgba(255,255,255,0.32)" stroke-width="1.4"/>
+          <path d="M12 8.2v7.6M8.7 12.7L12 16l3.3-3.3" stroke="#e8e8e8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Explore capabilities</span>
+      </a>
+    </footer>
   </div>
-</section>
 
-<section id="about">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="section-tag">// 01 — ABOUT</span>
-      <h2>A frontend developer who thinks like a data analyst and sees like a designer.</h2>
-    </div>
-    <div class="about-grid">
-      <div data-reveal>
-        <p>I work at the intersection of three disciplines that are usually kept apart: <strong>building interfaces</strong>, <strong>analyzing data</strong>, and <strong>designing visuals</strong> that make both legible to real people.</p>
-        <p>That combination means I don't just implement a design — I understand why it works, and I don't just visualize data — I build the product around it. I'm a Computer Science student at Modibbo Adama University, based in Jimeta, Yola, Nigeria, currently working at Zonus Global Concept Limited as a Junior Developer, Data Analyst, and Graphics Designer.</p>
-        <p>Right now I'm finishing up <strong>Lifeguard360</strong>, a geolocation-based emergency response system — one of several projects where frontend engineering and spatial data come together.</p>
-      </div>
-      <div data-reveal>
-        <div class="profile-photo">
-          <img src="images/profile.jpg" alt="Portrait of Wisdom Audi">
+  <main id="main-content">
+    <!-- =====================================================================
+         AI SOLUTIONS — Connected Operations Blueprint
+         ===================================================================== -->
+    <section id="solutions" class="section-block" data-nav-section="solutions">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="section-label">AI Solutions</span>
+          <h2 class="section-heading">Let's build a <em>better</em> way to run your business.</h2>
+          <p class="section-sub">From handling everyday tasks to serving your customers, we'll create solutions that make a real difference.</p>
         </div>
-        <div class="stat-card">
-          <span class="num">3</span>
-          <span class="label">disciplines, one practice — development, data, design</span>
-        </div>
-        <div class="stat-card">
-          <span class="num">2022 — Present</span>
-          <span class="label">B.Sc. Computer Science, Modibbo Adama University</span>
-        </div>
-        <div class="stat-card">
-          <span class="num">Yola, NG</span>
-          <span class="label">based in Jimeta, Adamawa State, open to remote work</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section id="skills">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="section-tag">// 02 — SKILLS</span>
-      <h2>What I bring to a team.</h2>
-    </div>
-    <div class="skills-grid">
-      <div class="skill-col" data-reveal>
-        <div class="icon-mark">&lt;/&gt;</div>
-        <h3>Web Development</h3>
-        <div class="sub">Building interfaces that hold up in production.</div>
-        <div class="skill-tags">
-          <span>JavaScript</span><span>HTML</span><span>CSS</span><span>Web Development</span><span>VS Code</span><span>Responsive UI</span><span>Component Architecture</span>
-        </div>
-      </div>
-      <div class="skill-col" data-reveal>
-        <div class="icon-mark">∑</div>
-        <h3>Data Analysis</h3>
-        <div class="sub">Turning raw data into decisions.</div>
-        <div class="skill-tags">
-          <span>Python</span><span>PyCharm</span><span>Data Analysis</span><span>Data Cleaning</span><span>Reporting</span><span>Spreadsheet Modeling</span>
-        </div>
-      </div>
-      <div class="skill-col" data-reveal>
-        <div class="icon-mark">◆</div>
-        <h3>Graphics &amp; Visual Design</h3>
-        <div class="sub">Designing the layer people actually see.</div>
-        <div class="skill-tags">
-          <span>Photoshop</span><span>CorelDRAW</span><span>Poster Design</span><span>Flyer Design</span><span>Logo Design</span><span>Photo Editing</span><span>Brand Identity</span><span>Typography</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+        <div class="blueprint-stage" data-reveal>
+          <div class="blueprint-toolbar">
+            <div class="blueprint-tabs" role="tablist" aria-label="AI automation capabilities">
+              <button type="button" class="bp-tab active" role="tab" aria-selected="true" data-solution="agents">AI Agents &amp; Assistants</button>
+              <button type="button" class="bp-tab" role="tab" aria-selected="false" data-solution="support">Customer Support</button>
+              <button type="button" class="bp-tab" role="tab" aria-selected="false" data-solution="sales">Sales &amp; Leads</button>
+              <button type="button" class="bp-tab" role="tab" aria-selected="false" data-solution="process">Workflow Automation</button>
+              <button type="button" class="bp-tab" role="tab" aria-selected="false" data-solution="infra">Web &amp; Custom AI</button>
+            </div>
+          </div>
 
-<section id="experience">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="section-tag">// 03 — EXPERIENCE</span>
-      <h2>Where I've worked.</h2>
+          <div class="blueprint-panel" role="tabpanel" aria-live="polite">
+            <div class="blueprint-header">
+              <div class="blueprint-meta">
+                <h3 id="sol-title" class="blueprint-title">AI Agents &amp; Assistants</h3>
+                <p id="sol-summary" class="blueprint-summary">
+                  Autonomous assistants that interpret requests, apply business rules, and execute tasks.
+                </p>
+              </div>
+              <a href="#contact" id="sol-discuss-btn" class="btn btn-ghost btn-compact">Discuss This System</a>
+            </div>
+
+            <div class="blueprint-canvas">
+              <div class="blueprint-grid-bg" aria-hidden="true"></div>
+              <div class="blueprint-glow" aria-hidden="true"></div>
+              <div id="blueprint-diagram" class="blueprint-diagram">
+                <div class="bp-node">
+                  <div class="bp-node-head"><span class="bp-node-step">01 · INPUT</span></div>
+                  <strong class="bp-node-title">Trigger</strong>
+                  <span class="bp-node-sub">Event or webhook</span>
+                </div>
+                <div class="bp-wire" aria-hidden="true"><span class="bp-wire-line"></span><span class="bp-wire-pulse"></span><span class="bp-wire-arrow">→</span></div>
+                <div class="bp-node">
+                  <div class="bp-node-head"><span class="bp-node-step">02 · CONTEXT</span></div>
+                  <strong class="bp-node-title">Incoming request</strong>
+                  <span class="bp-node-sub">Structured payload</span>
+                </div>
+                <div class="bp-wire" aria-hidden="true"><span class="bp-wire-line"></span><span class="bp-wire-pulse"></span><span class="bp-wire-arrow">→</span></div>
+                <div class="bp-node bp-node--core">
+                  <div class="bp-core-ring" aria-hidden="true">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="9.5" stroke="rgba(255,255,255,0.28)" stroke-width="1" stroke-dasharray="3 3"/>
+                      <circle cx="12" cy="12" r="5" stroke="rgba(255,255,255,0.75)" stroke-width="1.2"/>
+                      <circle cx="12" cy="12" r="1.8" fill="#ffffff"/>
+                    </svg>
+                  </div>
+                  <div class="bp-node-head"><span class="bp-node-step">03 · AI CORE</span><span class="bp-core-dot"></span></div>
+                  <strong class="bp-node-title">AI Agent</strong>
+                  <span class="bp-node-sub">Reasoning &amp; tool use</span>
+                </div>
+                <div class="bp-wire" aria-hidden="true"><span class="bp-wire-line"></span><span class="bp-wire-pulse"></span><span class="bp-wire-arrow">→</span></div>
+                <div class="bp-node">
+                  <div class="bp-node-head"><span class="bp-node-step">04 · OUTCOME</span></div>
+                  <strong class="bp-node-title">Executed task</strong>
+                  <span class="bp-node-sub">Verified completion</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         INDUSTRIES — Focused Sector Applications
+         ===================================================================== -->
+    <section id="industries" class="section-block" data-nav-section="industries">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="section-label">Industries</span>
+          <h2 class="section-heading">Engineered for how your <em>sector</em> moves.</h2>
+        </div>
+
+        <div class="industries-grid" data-reveal>
+          <div class="industries-tabs" role="tablist" aria-label="Industries">
+            <button type="button" class="ind-row active" role="tab" aria-selected="true" data-industry="retail">
+              <span>Retail &amp; E-commerce</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="hospitality">
+              <span>Restaurants &amp; Hospitality</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="beauty">
+              <span>Beauty &amp; Personal Care</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="realestate">
+              <span>Real Estate</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="logistics">
+              <span>Logistics &amp; Transportation</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="services">
+              <span>Professional Services</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="smb">
+              <span>Small &amp; Medium Businesses</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <div class="industry-card" aria-live="polite">
+            <span class="industry-tag" id="ind-kicker">Retail &amp; E-commerce</span>
+            <h3 id="ind-title" class="industry-card-title">AI Shopping Guidance &amp; Order Support</h3>
+            <p id="ind-desc" class="industry-card-desc">
+              Automate product recommendations, instant order tracking replies, and post-purchase customer follow-ups.
+            </p>
+            <div class="industry-stack" id="ind-systems">Storefront · Inventory · Messaging Channels</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         HOW IT WORKS — Simple Three-Step Process
+         ===================================================================== -->
+    <section id="process" class="section-block" data-nav-section="process">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="section-label">How It Works</span>
+          <h2 class="section-heading">Three steps from friction to <em>flow.</em></h2>
+        </div>
+
+        <div class="process-row" data-reveal>
+          <article class="process-item">
+            <span class="process-step-num">01</span>
+            <h3>Audit &amp; Design</h3>
+            <p>Map operational bottlenecks and architect the exact AI workflows required.</p>
+          </article>
+          <article class="process-item">
+            <span class="process-step-num">02</span>
+            <h3>Build &amp; Connect</h3>
+            <p>Engineer custom AI agents, automations, and supporting web systems.</p>
+          </article>
+          <article class="process-item">
+            <span class="process-step-num">03</span>
+            <h3>Deploy &amp; Scale</h3>
+            <p>Launch into production with clean handoff and room to expand.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         OUR WORK — Selected Builds & Demonstrations
+         ===================================================================== -->
+    <section id="work" class="section-block" data-nav-section="work">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="section-label">Our Work</span>
+          <h2 class="section-heading">Selected <em>systems</em> and prototypes.</h2>
+        </div>
+
+        <div class="work-grid">
+          <article class="work-card" data-reveal>
+            <div class="work-media">
+              <img src="images/project-agencyos.jpg" alt="AgencyOS AI-powered agency operations platform" referrerpolicy="no-referrer">
+            </div>
+            <div class="work-body">
+              <div class="work-meta">01 · AI Operations · In Development</div>
+              <h3 class="work-title">AgencyOS</h3>
+              <p class="work-desc">AI-assisted operations platform coordinating client workflows and automation.</p>
+              <button type="button" class="work-inspect-btn" data-open-project="agencyos">Inspect System →</button>
+            </div>
+          </article>
+
+          <article class="work-card" data-reveal>
+            <div class="work-media">
+              <img src="images/project-api-abuse.jpg" alt="API Abuse and Bot Detection machine learning system" referrerpolicy="no-referrer">
+            </div>
+            <div class="work-body">
+              <div class="work-meta">02 · Machine Learning · Anomaly Detection</div>
+              <h3 class="work-title">API Abuse &amp; Bot Detection</h3>
+              <p class="work-desc">Random Forest classification system identifying automated API abuse in real time.</p>
+              <button type="button" class="work-inspect-btn" data-open-project="apiabuse">Inspect System →</button>
+            </div>
+          </article>
+
+          <article class="work-card" data-reveal>
+            <div class="work-media">
+              <img src="images/project-signal.jpg" alt="SIGNAL real-time dispatch coordination system" referrerpolicy="no-referrer">
+            </div>
+            <div class="work-body">
+              <div class="work-meta">03 · Real-Time Workflow · Dispatch</div>
+              <h3 class="work-title">SIGNAL</h3>
+              <p class="work-desc">Real-time incident reporting, location sharing, and responder coordination.</p>
+              <button type="button" class="work-inspect-btn" data-open-project="signal">Inspect System →</button>
+            </div>
+          </article>
+
+          <article class="work-card" data-reveal>
+            <div class="work-media">
+              <img src="images/project-wisdomkitchen.jpg" alt="WisdomKitchen digital restaurant ordering platform" referrerpolicy="no-referrer">
+            </div>
+            <div class="work-body">
+              <div class="work-meta">04 · Hospitality · Web Infrastructure</div>
+              <h3 class="work-title">WisdomKitchen</h3>
+              <p class="work-desc">Digital restaurant ordering workflow connecting menus directly to kitchen fulfillment.</p>
+              <button type="button" class="work-inspect-btn" data-open-project="wisdomkitchen">Inspect System →</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         FINAL CTA & DISCOVERY BRIEF
+         ===================================================================== -->
+    <section id="contact" class="section-block" data-nav-section="contact">
+      <div class="container">
+        <div class="contact-layout">
+          <div data-reveal>
+            <span class="section-label">Start Transforming</span>
+            <h2 class="section-heading">Ready for an <em>intelligent</em> operation?</h2>
+            <p class="section-sub">Tell us what slows your business down. We will design the system to automate it.</p>
+
+            <div class="contact-links">
+              <div class="contact-row">
+                <span class="contact-k">Email</span>
+                <a href="mailto:wisdomaudiuniverse@gmail.com" class="contact-v">wisdomaudiuniverse@gmail.com</a>
+              </div>
+              <div class="contact-row">
+                <span class="contact-k">GitHub</span>
+                <a href="https://github.com/Wisdomvision001/" target="_blank" rel="noopener noreferrer" class="contact-v">github.com/Wisdomvision001</a>
+              </div>
+              <div class="contact-row">
+                <span class="contact-k">LinkedIn</span>
+                <a href="https://www.linkedin.com/in/wisdom-audi-57026b344" target="_blank" rel="noopener noreferrer" class="contact-v">linkedin.com/in/wisdom-audi-57026b344</a>
+              </div>
+            </div>
+
+            <div class="hero-actions" style="justify-content: flex-start; margin-top: 24px;">
+              <a href="mailto:wisdomaudiuniverse@gmail.com" class="btn btn-solid">Email Directly</a>
+              <button type="button" id="copy-email-btn" class="btn btn-ghost">Copy Email</button>
+            </div>
+            <p id="copy-email-status" class="copy-status" aria-live="polite"></p>
+          </div>
+
+          <div class="contact-card" data-reveal>
+            <form id="contact-form" class="contact-form" novalidate>
+              <div class="form-field">
+                <label for="contact-name" class="form-label">Name</label>
+                <input id="contact-name" name="name" type="text" class="form-input" placeholder="Your full name" required>
+                <span id="error-name" class="form-error" aria-live="polite"></span>
+              </div>
+
+              <div class="form-field">
+                <label for="contact-email" class="form-label">Work Email</label>
+                <input id="contact-email" name="email" type="email" class="form-input" placeholder="you@company.com" required>
+                <span id="error-email" class="form-error" aria-live="polite"></span>
+              </div>
+
+              <div class="form-field">
+                <label for="contact-subject" class="form-label">Focus Area (Optional)</label>
+                <input id="contact-subject" name="subject" type="text" class="form-input" placeholder="AI agents, customer support, workflow automation">
+              </div>
+
+              <div class="form-field">
+                <label for="contact-message" class="form-label">What would you like to automate?</label>
+                <textarea id="contact-message" name="message" class="form-textarea" placeholder="Briefly describe your workflow or goal..." required></textarea>
+                <span id="error-message" class="form-error" aria-live="polite"></span>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-solid">Request Discovery Brief</button>
+              </div>
+
+              <div id="form-feedback" class="form-feedback" role="status" aria-live="polite">
+                <p id="form-feedback-text"></p>
+                <div class="form-feedback-actions">
+                  <a id="feedback-mailto-btn" href="mailto:wisdomaudiuniverse@gmail.com" class="btn btn-solid btn-compact">Open Email App</a>
+                  <button type="button" id="feedback-copy-btn" class="btn btn-ghost btn-compact">Copy Brief</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a href="#top" class="logo" aria-label="Wisdom Audi Universe Back to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <g transform="rotate(-30 12 12)">
+            <circle cx="7.3" cy="3.2" r="1.45"/>
+            <rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+            <rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/>
+            <circle cx="16.7" cy="20.8" r="1.45"/>
+          </g>
+        </svg>
+        <span class="logo-text">WISDOM AUDI <span class="logo-suffix">UNIVERSE</span></span>
+      </a>
+
+      <div class="footer-links">
+        <a href="#solutions">AI Solutions</a>
+        <a href="#industries">Industries</a>
+        <a href="#process">How It Works</a>
+        <a href="projects.html">Our Work</a>
+        <a href="contact.html">Contact</a>
+      </div>
+
+      <span class="footer-copy">© 2026 Wisdom Audi Universe</span>
     </div>
-    <div data-reveal>
-      <div class="timeline-item">
-        <div class="when mono">2025 — Present</div>
+  </footer>
+
+  <!-- =====================================================================
+       SYSTEM PREVIEW MODAL
+       ===================================================================== -->
+  <div
+    id="project-modal"
+    class="modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="modal-title"
+  >
+    <div class="modal-panel">
+      <div class="modal-top">
         <div>
-          <h3>Junior Developer, Data Analyst &amp; Graphics Designer</h3>
-          <div class="role-org">Zonus Global Concept Limited</div>
-          <p>Develop and maintain web applications, create posters, flyers, logos, and brand design materials, perform basic data analysis, and edit photos for marketing and branding purposes.</p>
+          <div id="modal-eyebrow" class="work-meta">01 · Selected System</div>
+          <h3 id="modal-title" class="work-title" style="margin-top: 6px;">System Title</h3>
+          <p id="modal-subtitle" class="modal-subtitle"></p>
         </div>
+        <button type="button" id="modal-close-btn" class="modal-close" aria-label="Close system preview">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M4 4L14 14M14 4L4 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
       </div>
-      <div class="timeline-item">
-        <div class="when mono">2022 — Present</div>
-        <div>
-          <h3>B.Sc. Computer Science Student</h3>
-          <div class="role-org">Modibbo Adama University</div>
-          <p>Studying alongside professional work, applying coursework directly to live projects — including the Lifeguard360 emergency response system proposal.</p>
-        </div>
+
+      <div class="modal-image-frame">
+        <img id="modal-img" src="images/project-agencyos.jpg" alt="System preview" referrerpolicy="no-referrer">
+      </div>
+
+      <p id="modal-desc" class="modal-body-text"></p>
+      <p id="modal-details" class="modal-body-text"></p>
+      <div id="modal-config-note" class="modal-config-note"></div>
+
+      <div class="modal-bottom">
+        <div id="modal-tech" class="modal-tech-line"></div>
+        <a id="modal-github-link" href="https://github.com/Wisdomvision001/" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-compact">GitHub Profile →</a>
       </div>
     </div>
   </div>
-</section>
 
-<section id="projects">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="section-tag"> SELECTED PROJECTS</span>
-      <h2>A few things I've built.</h2>
-    </div>
-    <div class="projects-grid">
-      <div class="project-card" data-reveal>
-        <div class="ptag">ACADEMIC PROJECT · IN PROGRESS</div>
-        <h3>Lifeguard360</h3>
-        <p>A geolocation-based emergency response system designed to connect people in distress with the nearest available help in real time.</p>
-        <div class="tech"><span>Geolocation</span><span>System Design</span><span>Frontend</span></div>
-      </div>
-      <div class="project-card" data-reveal>
-        <div class="ptag">PROFESSIONAL DOCUMENT</div>
-        <h3>Resume & Document Systems</h3>
-        <p>Designed and built a professional résumé system with consistent navy-and-blue branding, structured for clarity across both digital and print formats.</p>
-        <div class="tech"><span>Visual Design</span><span>Document Engineering</span></div>
-      </div>
-      <div class="project-card" data-reveal>
-        <div class="ptag">CLIENT PROJECT</div>
-        <h3>Italian Fast Food Website</h3>
-        <p>Designed and developed a fast-food restaurant website with a bold Italian theme, quick ordering flow, and mobile-first UX for takeout customers.</p>
-        <div class="tech"><span>Web Design</span><span>Responsive UI</span><span>Branding</span></div>
-      </div>
-      <div class="project-card" data-reveal>
-        
-       <div class="ptag"> CLIENT PROJECT</div>
-        <h3>ORBIT Studio Website</h3>
-        <p>Designed and developed a modern, responsive portfolio website for a creative digital studio using HTML, CSS, and JavaScript. The project includes interactive animations, responsive layouts, and engaging UI effects to deliver a premium user experience..</p>
-               <div class="tech"><span>Web Design</span><span>Responsive UI</span><span>Branding</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="education">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="section-tag">// 06 — EDUCATION</span>
-      <h2>Academic background.</h2>
-    </div>
-    <div data-reveal>
-      <div class="edu-row">
-        <div>
-          <h3>B.Sc. Computer Science</h3>
-          <div class="where">Modibbo Adama University — Web Development, Data Analysis &amp; Graphics Design</div>
-        </div>
-        <div class="when">2022 — Present</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="contact" class="contact-section">
-  <div class="wrap">
-    <span class="section-tag">// 07 — CONTACT</span>
-    <h2>Let's build something worth shipping.</h2>
-    <p>Open to frontend, data, and design roles — remote or based in Nigeria.</p>
-    <div class="contact-links">
-      <a href="mailto:audiwisdom4@gmail.com" class="btn btn-primary">Email me</a>
-      <a href="https://www.linkedin.com/in/wisdom-audi-57026b344/" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
-      <a href="#" class="btn btn-ghost">GitHub</a>
-    </div>
-  </div>
-</section>
-
-<footer>WISDOM AUDI — © 2026 — BUILT FROM YOLA, NIGERIA</footer>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
