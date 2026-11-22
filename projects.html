@@ -60,64 +60,87 @@
   </header>
 
   <main id="main-content">
-    <section class="section-block" style="padding-top: 72px;">
+    <section class="section-block subpage-hero-section">
       <div class="container">
-        <div class="section-head" data-reveal>
-          <span class="section-label">Selected Work</span>
-          <h1 class="section-heading">Real <em>systems</em>, AI workflows, and digital infrastructure.</h1>
-          <p class="section-sub">Production-oriented builds spanning agency automation, anomaly detection, real-time dispatch, and hospitality ordering.</p>
+        <div class="section-split-head">
+          <div class="section-head" data-reveal>
+            <span class="section-label">Selected Work</span>
+            <h1 class="section-heading">Real <em>systems</em>, AI workflows, and digital infrastructure.</h1>
+          </div>
+          <div class="section-split-aside" data-reveal data-reveal-delay="80ms">
+            <p class="section-sub">Production-oriented builds spanning agency automation, anomaly detection, real-time dispatch, and hospitality ordering.</p>
+          </div>
         </div>
 
-        <div class="work-grid">
-          <article class="work-card" data-reveal>
-            <div class="work-media"><img src="images/project-agencyos.jpg" alt="AgencyOS platform preview" referrerpolicy="no-referrer"></div>
-            <div class="work-body">
-              <div class="work-meta">01 · AI Operations · In Development</div>
-              <h2 class="work-title">AgencyOS</h2>
-              <p class="work-desc">AI-assisted operations platform coordinating client pipelines, tasks, and automated workflows.</p>
-              <button type="button" class="work-inspect-btn" data-open-project="agencyos">Inspect System →</button>
-            </div>
-          </article>
+        <div class="work-filters" role="group" aria-label="Filter systems by discipline" data-reveal>
+          <button type="button" class="work-filter-btn active" data-filter="all" aria-pressed="true">All Systems (05)</button>
+          <button type="button" class="work-filter-btn" data-filter="ai" aria-pressed="false">AI &amp; Machine Learning</button>
+          <button type="button" class="work-filter-btn" data-filter="web" aria-pressed="false">Real-Time &amp; Web</button>
+        </div>
 
-          <article class="work-card" data-reveal>
+        <article class="work-featured" data-project-cat="ai web" data-reveal>
+          <div class="work-media"><img src="images/project-agencyos.jpg" alt="AgencyOS platform preview" referrerpolicy="no-referrer"></div>
+          <div class="work-body">
+            <div class="work-meta">01 · Featured · AI Operations · In Development</div>
+            <h2 class="work-title">AgencyOS</h2>
+            <p class="work-desc">AI-assisted operations platform coordinating client pipelines, tasks, and automated workflows from a single command surface.</p>
+            <div class="work-tech-inline">React · TypeScript · REST APIs · Workflow Automation</div>
+            <button type="button" class="work-inspect-btn" data-open-project="agencyos">Inspect System →</button>
+          </div>
+        </article>
+
+        <div class="work-grid">
+          <article class="work-card" data-project-cat="ai" data-reveal data-reveal-delay="40ms">
             <div class="work-media"><img src="images/project-api-abuse.jpg" alt="API Abuse and Bot Detection preview" referrerpolicy="no-referrer"></div>
             <div class="work-body">
               <div class="work-meta">02 · Machine Learning · Anomaly Detection</div>
               <h2 class="work-title">API Abuse &amp; Bot Detection</h2>
               <p class="work-desc">Random Forest classification system identifying suspicious API activity and automated bot patterns.</p>
+              <div class="work-tech-inline">Python · Scikit-learn · Pandas · Streamlit</div>
               <button type="button" class="work-inspect-btn" data-open-project="apiabuse">Inspect System →</button>
             </div>
           </article>
 
-          <article class="work-card" data-reveal>
+          <article class="work-card" data-project-cat="web" data-reveal data-reveal-delay="90ms">
             <div class="work-media"><img src="images/project-signal.jpg" alt="SIGNAL platform preview" referrerpolicy="no-referrer"></div>
             <div class="work-body">
               <div class="work-meta">03 · Real-Time Workflow · Dispatch</div>
               <h2 class="work-title">SIGNAL</h2>
               <p class="work-desc">Emergency location-sharing and incident dispatch coordination platform built for rapid routing.</p>
+              <div class="work-tech-inline">React · Geolocation API · Live Dispatch</div>
               <button type="button" class="work-inspect-btn" data-open-project="signal">Inspect System →</button>
             </div>
           </article>
 
-          <article class="work-card" data-reveal>
+          <article class="work-card" data-project-cat="web" data-reveal data-reveal-delay="40ms">
             <div class="work-media"><img src="images/project-wisdomkitchen.jpg" alt="WisdomKitchen platform preview" referrerpolicy="no-referrer"></div>
             <div class="work-body">
               <div class="work-meta">04 · Hospitality · Web Infrastructure</div>
               <h2 class="work-title">WisdomKitchen</h2>
               <p class="work-desc">Digital restaurant ordering workflow connecting menus directly to structured fulfillment.</p>
+              <div class="work-tech-inline">Python · Flask · JavaScript · Order Fulfillment</div>
               <button type="button" class="work-inspect-btn" data-open-project="wisdomkitchen">Inspect System →</button>
             </div>
           </article>
 
-          <article class="work-card" data-reveal>
+          <article class="work-card" data-project-cat="web ai" data-reveal data-reveal-delay="90ms">
             <div class="work-media"><img src="images/project-lifeguard360.jpg" alt="Lifeguard360 platform preview" referrerpolicy="no-referrer"></div>
             <div class="work-body">
               <div class="work-meta">05 · Emergency Response · Guided Triage</div>
               <h2 class="work-title">Lifeguard360</h2>
               <p class="work-desc">Web-based emergency response and structured first-aid guidance application.</p>
+              <div class="work-tech-inline">HTML5 · CSS3 · JavaScript · Triage Protocols</div>
               <button type="button" class="work-inspect-btn" data-open-project="lifeguard360">Inspect System →</button>
             </div>
           </article>
+        </div>
+
+        <div class="subpage-cta-band" data-reveal>
+          <div class="subpage-cta-copy">
+            <h2>Need a custom automation or web platform?</h2>
+            <p>Tell us where manual workflows slow your operation down.</p>
+          </div>
+          <a href="contact.html" class="btn btn-solid">Request Discovery Brief</a>
         </div>
       </div>
     </section>
@@ -142,6 +165,8 @@
         <a href="index.html#industries">Industries</a>
         <a href="index.html#process">How It Works</a>
         <a href="projects.html">Our Work</a>
+        <a href="about.html">About</a>
+        <a href="skills.html">Capabilities</a>
         <a href="contact.html">Contact</a>
       </div>
 

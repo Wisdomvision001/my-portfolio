@@ -1,0 +1,10 @@
+node_modules/
+.aistudio/
+.git/
+.npm/
+*.log
+.DS_Store
+data/.admin-key
+data/*.sqlite
+data/*.sqlite-wal
+data/*.sqlite-shm

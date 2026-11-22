@@ -1,0 +1,120 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Default-Deny Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Primitive Guards & Identity Helpers
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isBootstrappedAdminEmail() {
+      return isVerifiedUser() &&
+        request.auth.token.email is string &&
+        (
+          request.auth.token.email == 'audiwisdom@gmail.com' ||
+          request.auth.token.email == 'wisdomaudiuniverse@gmail.com'
+        );
+    }
+
+    function isAdmin() {
+      return isBootstrappedAdminEmail();
+    }
+
+    // Validation Blueprint: AdminProfile
+    function isValidAdminProfile(data, adminUid) {
+      return data.keys().hasAll(['uid', 'email', 'role', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'email', 'displayName', 'role', 'createdAt', 'updatedAt', 'lastLoginAt']) &&
+        data.uid is string &&
+        data.uid == adminUid &&
+        isValidId(data.uid) &&
+        data.email is string &&
+        data.email.size() >= 3 &&
+        data.email.size() <= 160 &&
+        (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 120)) &&
+        data.role is string &&
+        data.role == 'admin' &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp &&
+        (!('lastLoginAt' in data) || data.lastLoginAt is timestamp);
+    }
+
+    // Validation Blueprint: AdminAuthEvent
+    function isValidAdminAuthEvent(data) {
+      return data.keys().hasAll(['uid', 'email', 'action', 'createdAt']) &&
+        data.keys().hasOnly(['uid', 'email', 'action', 'userAgent', 'createdAt']) &&
+        data.uid is string &&
+        data.uid == request.auth.uid &&
+        isValidId(data.uid) &&
+        data.email is string &&
+        data.email.size() >= 3 &&
+        data.email.size() <= 160 &&
+        data.email == request.auth.token.email &&
+        data.action is string &&
+        (data.action == 'login' || data.action == 'logout') &&
+        (!('userAgent' in data) || (data.userAgent is string && data.userAgent.size() <= 240)) &&
+        data.createdAt is timestamp &&
+        data.createdAt == request.time;
+    }
+
+    // /admins/{adminUid} — Authorized Admin Profiles
+    match /admins/{adminUid} {
+      allow get: if isValidId(adminUid) && isAdmin();
+      allow list: if isAdmin() && existing().role == 'admin';
+
+      allow create: if isValidId(adminUid) &&
+        isAdmin() &&
+        isValidAdminProfile(incoming(), adminUid) &&
+        incoming().uid == request.auth.uid &&
+        incoming().email == request.auth.token.email &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        (!('lastLoginAt' in incoming()) || incoming().lastLoginAt == request.time);
+
+      allow update: if isValidId(adminUid) &&
+        isAdmin() &&
+        isValidAdminProfile(incoming(), adminUid) &&
+        incoming().uid == existing().uid &&
+        incoming().email == existing().email &&
+        incoming().role == existing().role &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        (!('lastLoginAt' in incoming()) || incoming().lastLoginAt == request.time) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'updatedAt', 'lastLoginAt']);
+
+      allow delete: if false;
+    }
+
+    // /adminAuditLogs/{logId} — Immutable Authentication Audit Trail
+    match /adminAuditLogs/{logId} {
+      allow get: if isValidId(logId) && isAdmin();
+      allow list: if isAdmin() && existing().uid is string;
+
+      allow create: if isValidId(logId) &&
+        isAdmin() &&
+        isValidAdminAuthEvent(incoming());
+
+      allow update, delete: if false;
+    }
+  }
+}

@@ -1,8 +1,11 @@
 import express from 'express';
+import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI, ThinkingLevel, Type } from '@google/genai';
+import { initializeApp as initializeAdminApp, getApps as getAdminApps, getApp as getAdminApp } from 'firebase-admin/app';
+import { getAuth as getFirebaseAdminAuth } from 'firebase-admin/auth';
 import {
   ALLOWED_LEAD_STATUSES,
   computeLeadDedupeHash,
@@ -42,6 +45,40 @@ const PRIMARY_MODEL = 'gemini-4-hydrogen';
 const FALLBACK_MODEL = 'gemini-3.1-flash-lite';
 const DEFAULT_THINKING_LEVEL = ThinkingLevel.LOW;
 const ADMIN_COOKIE_NAME = 'wau_admin_session';
+const AUTHORIZED_ADMIN_EMAILS = ['audiwisdom@gmail.com', 'wisdomaudiuniverse@gmail.com'];
+
+function loadFirebaseProjectId() {
+  const cfgPath = path.join(__dirname, 'firebase-applet-config.json');
+  if (!fs.existsSync(cfgPath)) return '';
+  try {
+    const raw = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+    const projectId = typeof raw?.projectId === 'string' ? raw.projectId.trim() : '';
+    if (!projectId || projectId === 'remixed-project-id') return '';
+    return projectId;
+  } catch {
+    return '';
+  }
+}
+
+function getFirebaseAuthVerifier() {
+  const projectId = loadFirebaseProjectId();
+  if (!projectId) return null;
+  const adminApp = getAdminApps().length
+    ? getAdminApp()
+    : initializeAdminApp({ projectId });
+  return getFirebaseAdminAuth(adminApp);
+}
+
+function getAllowedAdminEmails() {
+  return new Set(AUTHORIZED_ADMIN_EMAILS);
+}
+
+function isAuthorizedAdminEmail(email, emailVerified) {
+  if (emailVerified !== true) return false;
+  const normalized = String(email || '').trim().toLowerCase();
+  if (!normalized) return false;
+  return getAllowedAdminEmails().has(normalized);
+}
 
 const ALLOWED_SOLUTIONS = [
   'AI Agents & Intelligent Assistants',
@@ -163,9 +200,12 @@ function getGeminiClient() {
   });
 }
 
-// Initialize admin secret & run startup retention sweep cleanly
-getAdminAccessSecret();
-pruneExpiredRecords(process.env.LEAD_RETENTION_DAYS);
+// Run startup retention sweep cleanly without risking server boot failure
+try {
+  pruneExpiredRecords(process.env.LEAD_RETENTION_DAYS);
+} catch (err) {
+  console.warn(`[Wisdom AI] Startup retention sweep skipped (${err?.message || 'DB error'})`);
+}
 const retentionTimer = setInterval(() => {
   try {
     pruneExpiredRecords(process.env.LEAD_RETENTION_DAYS);
@@ -260,14 +300,49 @@ function timingSafeCompare(a, b) {
   return crypto.timingSafeEqual(bufA, bufB);
 }
 
-function requireAdminAuth(req, res, next) {
+async function verifyFirebaseBearerToken(req) {
+  const authHeader = req.headers.authorization || '';
+  if (!authHeader.startsWith('Bearer ')) return null;
+  const idToken = authHeader.slice(7).trim();
+  if (!idToken) return null;
+  const verifier = getFirebaseAuthVerifier();
+  if (!verifier) return null;
+  try {
+    const decoded = await verifier.verifyIdToken(idToken);
+    if (!isAuthorizedAdminEmail(decoded.email, decoded.email_verified)) {
+      return { unauthorized: true, email: decoded.email || '' };
+    }
+    return {
+      authorized: true,
+      uid: decoded.uid,
+      email: decoded.email,
+      name: decoded.name || ''
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function requireAdminAuth(req, res, next) {
   const cookies = parseCookies(req.headers.cookie);
   const token = cookies[ADMIN_COOKIE_NAME];
-  if (!validateAdminSession(token)) {
-    return res.status(401).json({ error: 'Authentication required.' });
+  if (validateAdminSession(token)) {
+    req.adminToken = token;
+    return next();
   }
-  req.adminToken = token;
-  return next();
+
+  const bearerCheck = await verifyFirebaseBearerToken(req);
+  if (bearerCheck?.authorized) {
+    req.firebaseAdmin = bearerCheck;
+    return next();
+  }
+  if (bearerCheck?.unauthorized) {
+    return res.status(403).json({
+      error: 'This Google account is not authorized for Wisdom Audi Universe admin access.'
+    });
+  }
+
+  return res.status(401).json({ error: 'Firebase authentication required.' });
 }
 
 function validateMessages(rawMessages) {
@@ -968,28 +1043,78 @@ app.post('/api/catalogue-request', catalogueLimiter, async (req, res) => {
 // Internal Lead Management & Telemetry Admin API
 // =========================================================================
 
-app.get('/api/admin/session', (req, res) => {
+app.get('/api/admin/session', async (req, res) => {
   const cookies = parseCookies(req.headers.cookie);
-  const authenticated = validateAdminSession(cookies[ADMIN_COOKIE_NAME]);
-  res.json({ authenticated });
+  let authenticated = validateAdminSession(cookies[ADMIN_COOKIE_NAME]);
+  let admin = null;
+  if (!authenticated) {
+    const bearerCheck = await verifyFirebaseBearerToken(req);
+    if (bearerCheck?.authorized) {
+      authenticated = true;
+      admin = {
+        uid: bearerCheck.uid,
+        email: bearerCheck.email,
+        name: bearerCheck.name
+      };
+    }
+  }
+  res.json({
+    authenticated,
+    authMode: 'firebase',
+    firebaseReady: Boolean(loadFirebaseProjectId()),
+    admin
+  });
 });
 
-app.post('/api/admin/login', adminLoginLimiter, (req, res) => {
-  const submitted = typeof req.body?.accessKey === 'string' ? req.body.accessKey.trim() : '';
-  const { secret } = getAdminAccessSecret();
-  if (!secret) {
-    return res.status(503).json({ error: 'Admin access key is unavailable on the server.' });
-  }
-  if (!timingSafeCompare(submitted, secret)) {
-    return res.status(401).json({ error: 'Invalid access key.' });
+app.post('/api/admin/firebase-login', adminLoginLimiter, async (req, res) => {
+  const idToken = typeof req.body?.idToken === 'string' ? req.body.idToken.trim() : '';
+  if (!idToken) {
+    return res.status(400).json({ error: 'Firebase ID token is required.' });
   }
 
-  const { rawToken, expiresAt } = createAdminSession(12);
-  res.setHeader(
-    'Set-Cookie',
-    `${ADMIN_COOKIE_NAME}=${encodeURIComponent(rawToken)}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${12 * 3600}`
-  );
-  return res.json({ ok: true, expiresAt });
+  const verifier = getFirebaseAuthVerifier();
+  if (!verifier) {
+    return res.status(503).json({ error: 'Firebase Authentication is not configured on the server.' });
+  }
+
+  try {
+    const decoded = await verifier.verifyIdToken(idToken);
+    if (decoded.email_verified !== true) {
+      return res.status(403).json({ error: 'A verified Google email address is required.' });
+    }
+    if (!isAuthorizedAdminEmail(decoded.email, decoded.email_verified)) {
+      return res.status(403).json({
+        error: `Account "${decoded.email || 'unknown'}" is not authorized for the admin dashboard.`
+      });
+    }
+
+    const { rawToken, expiresAt } = createAdminSession(12);
+    const isHttps = req.secure || req.headers['x-forwarded-proto'] === 'https';
+    const cookieAttrs = isHttps
+      ? 'Path=/; HttpOnly; SameSite=None; Secure'
+      : 'Path=/; HttpOnly; SameSite=Lax';
+    res.setHeader(
+      'Set-Cookie',
+      `${ADMIN_COOKIE_NAME}=${encodeURIComponent(rawToken)}; ${cookieAttrs}; Max-Age=${12 * 3600}`
+    );
+    return res.json({
+      ok: true,
+      expiresAt,
+      admin: {
+        uid: decoded.uid,
+        email: decoded.email,
+        name: decoded.name || ''
+      }
+    });
+  } catch {
+    return res.status(401).json({ error: 'Invalid or expired Firebase authentication token.' });
+  }
+});
+
+app.post('/api/admin/login', adminLoginLimiter, (_req, res) => {
+  return res.status(410).json({
+    error: 'Passphrase login has been replaced by Firebase Google Sign-In.'
+  });
 });
 
 app.post('/api/admin/logout', (req, res) => {
@@ -997,7 +1122,11 @@ app.post('/api/admin/logout', (req, res) => {
   if (cookies[ADMIN_COOKIE_NAME]) {
     revokeAdminSession(cookies[ADMIN_COOKIE_NAME]);
   }
-  res.setHeader('Set-Cookie', `${ADMIN_COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0`);
+  const isHttps = req.secure || req.headers['x-forwarded-proto'] === 'https';
+  const cookieAttrs = isHttps
+    ? 'Path=/; HttpOnly; SameSite=None; Secure'
+    : 'Path=/; HttpOnly; SameSite=Lax';
+  res.setHeader('Set-Cookie', `${ADMIN_COOKIE_NAME}=; ${cookieAttrs}; Max-Age=0`);
   return res.json({ ok: true });
 });
 
@@ -1256,7 +1385,7 @@ app.get('/admin', (_req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Prevent static exposure of server code, SQLite DB, secrets, libs, metadata, and dotfiles
+// Prevent static exposure of server code, SQLite DB, secrets, libs, metadata, rules, and dotfiles
 app.use((req, res, next) => {
   const reqPath = (req.path || '/').toLowerCase();
   if (
@@ -1265,11 +1394,21 @@ app.use((req, res, next) => {
     reqPath.startsWith('/data/') ||
     reqPath === '/lib' ||
     reqPath.startsWith('/lib/') ||
+    reqPath === '/src' ||
+    reqPath.startsWith('/src/') ||
+    reqPath === '/scripts' ||
+    reqPath.startsWith('/scripts/') ||
     reqPath === '/server.js' ||
     reqPath === '/package.json' ||
     reqPath === '/package-lock.json' ||
     reqPath === '/bun.lock' ||
     reqPath === '/metadata.json' ||
+    reqPath === '/eslint.config.js' ||
+    reqPath === '/firebase-blueprint.json' ||
+    reqPath === '/security_spec.md' ||
+    reqPath === '/firestore.rules' ||
+    reqPath === '/firestore.rules.test.ts' ||
+    reqPath.endsWith('.rules') ||
     reqPath.endsWith('.sqlite') ||
     reqPath.endsWith('.sqlite-wal') ||
     reqPath.endsWith('.sqlite-shm')

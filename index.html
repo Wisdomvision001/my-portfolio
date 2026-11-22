@@ -145,13 +145,18 @@
          ===================================================================== -->
     <section id="solutions" class="section-block" data-nav-section="solutions">
       <div class="container">
-        <div class="section-head" data-reveal>
-          <span class="section-label">AI Solutions</span>
-          <h2 class="section-heading">Let's build a <em>better</em> way to run your business.</h2>
-          <p class="section-sub">From handling everyday tasks to serving your customers, we'll create solutions that make a real difference.</p>
+        <div class="section-split-head">
+          <div class="section-head" data-reveal>
+            <span class="section-label">AI Solutions</span>
+            <h2 class="section-heading">Let's build a <em>better</em> way to run your business.</h2>
+          </div>
+          <div class="section-split-aside" data-reveal data-reveal-delay="80ms">
+            <p class="section-sub">From handling everyday tasks to serving your customers, we'll create solutions that make a real difference.</p>
+            <span class="section-cue mono">05 Live Architecture Blueprints</span>
+          </div>
         </div>
 
-        <div class="blueprint-stage" data-reveal>
+        <div class="blueprint-stage" data-reveal data-reveal-delay="120ms">
           <div class="blueprint-toolbar">
             <div class="blueprint-tabs" role="tablist" aria-label="AI automation capabilities">
               <button type="button" class="bp-tab active" role="tab" aria-selected="true" data-solution="agents">AI Agents &amp; Assistants</button>
@@ -177,19 +182,19 @@
               <div class="blueprint-grid-bg" aria-hidden="true"></div>
               <div class="blueprint-glow" aria-hidden="true"></div>
               <div id="blueprint-diagram" class="blueprint-diagram">
-                <div class="bp-node">
+                <div class="bp-node" style="--nd:0ms">
                   <div class="bp-node-head"><span class="bp-node-step">01 · INPUT</span></div>
                   <strong class="bp-node-title">Trigger</strong>
                   <span class="bp-node-sub">Event or webhook</span>
                 </div>
                 <div class="bp-wire" aria-hidden="true"><span class="bp-wire-line"></span><span class="bp-wire-pulse"></span><span class="bp-wire-arrow">→</span></div>
-                <div class="bp-node">
+                <div class="bp-node" style="--nd:80ms">
                   <div class="bp-node-head"><span class="bp-node-step">02 · CONTEXT</span></div>
                   <strong class="bp-node-title">Incoming request</strong>
                   <span class="bp-node-sub">Structured payload</span>
                 </div>
                 <div class="bp-wire" aria-hidden="true"><span class="bp-wire-line"></span><span class="bp-wire-pulse"></span><span class="bp-wire-arrow">→</span></div>
-                <div class="bp-node bp-node--core">
+                <div class="bp-node bp-node--core" style="--nd:160ms">
                   <div class="bp-core-ring" aria-hidden="true">
                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
                       <circle cx="12" cy="12" r="9.5" stroke="rgba(255,255,255,0.28)" stroke-width="1" stroke-dasharray="3 3"/>
@@ -202,7 +207,7 @@
                   <span class="bp-node-sub">Reasoning &amp; tool use</span>
                 </div>
                 <div class="bp-wire" aria-hidden="true"><span class="bp-wire-line"></span><span class="bp-wire-pulse"></span><span class="bp-wire-arrow">→</span></div>
-                <div class="bp-node">
+                <div class="bp-node" style="--nd:240ms">
                   <div class="bp-node-head"><span class="bp-node-step">04 · OUTCOME</span></div>
                   <strong class="bp-node-title">Executed task</strong>
                   <span class="bp-node-sub">Verified completion</span>
@@ -221,136 +226,152 @@
       <div class="container">
         <div class="section-head" data-reveal>
           <span class="section-label">Industries</span>
-          <h2 class="section-heading">Engineered for how your <em>sector</em> moves.</h2>
+          <h2 class="section-heading">Every business is <em>different.</em> Your solutions should be too.</h2>
+          <p class="section-sub">We work with businesses across different industries to understand their needs and build digital solutions that help them work better, serve customers, and grow.</p>
         </div>
 
-        <div class="industries-grid" data-reveal>
-          <div class="industries-tabs" role="tablist" aria-label="Industries">
+        <div class="industries-grid">
+          <div class="industries-tabs" role="tablist" aria-label="Industries" data-reveal>
             <button type="button" class="ind-row active" role="tab" aria-selected="true" data-industry="retail">
-              <span>Retail &amp; E-commerce</span>
+              <span class="ind-row-main"><span class="ind-num">01</span><span>Retail &amp; E-commerce</span></span>
               <span aria-hidden="true">→</span>
             </button>
             <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="hospitality">
-              <span>Restaurants &amp; Hospitality</span>
+              <span class="ind-row-main"><span class="ind-num">02</span><span>Restaurants &amp; Hospitality</span></span>
               <span aria-hidden="true">→</span>
             </button>
             <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="beauty">
-              <span>Beauty &amp; Personal Care</span>
+              <span class="ind-row-main"><span class="ind-num">03</span><span>Beauty &amp; Personal Care</span></span>
               <span aria-hidden="true">→</span>
             </button>
             <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="realestate">
-              <span>Real Estate</span>
+              <span class="ind-row-main"><span class="ind-num">04</span><span>Real Estate</span></span>
               <span aria-hidden="true">→</span>
             </button>
             <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="logistics">
-              <span>Logistics &amp; Transportation</span>
+              <span class="ind-row-main"><span class="ind-num">05</span><span>Logistics &amp; Transportation</span></span>
               <span aria-hidden="true">→</span>
             </button>
             <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="services">
-              <span>Professional Services</span>
+              <span class="ind-row-main"><span class="ind-num">06</span><span>Professional Services</span></span>
               <span aria-hidden="true">→</span>
             </button>
             <button type="button" class="ind-row" role="tab" aria-selected="false" data-industry="smb">
-              <span>Small &amp; Medium Businesses</span>
+              <span class="ind-row-main"><span class="ind-num">07</span><span>Small &amp; Medium Businesses</span></span>
               <span aria-hidden="true">→</span>
             </button>
           </div>
 
-          <div class="industry-card" aria-live="polite">
+          <div class="industry-card" id="industry-spotlight-card" aria-live="polite" data-reveal data-reveal-delay="90ms">
             <span class="industry-tag" id="ind-kicker">Retail &amp; E-commerce</span>
             <h3 id="ind-title" class="industry-card-title">AI Shopping Guidance &amp; Order Support</h3>
             <p id="ind-desc" class="industry-card-desc">
               Automate product recommendations, instant order tracking replies, and post-purchase customer follow-ups.
             </p>
-            <div class="industry-stack" id="ind-systems">Storefront · Inventory · Messaging Channels</div>
+            <div class="industry-footer-row">
+              <div class="industry-stack" id="ind-systems">Storefront · Inventory · Messaging Channels</div>
+              <a href="#contact" id="ind-cta" class="work-inspect-btn" style="margin-top: 0;">Discuss Sector Workflow →</a>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- =====================================================================
-         HOW IT WORKS — Simple Three-Step Process
+         HOW IT WORKS — Sticky Introduction & Vertical Progression Rail
          ===================================================================== -->
     <section id="process" class="section-block" data-nav-section="process">
       <div class="container">
-        <div class="section-head" data-reveal>
-          <span class="section-label">How It Works</span>
-          <h2 class="section-heading">Three steps from friction to <em>flow.</em></h2>
-        </div>
+        <div class="process-split">
+          <div class="process-intro" data-reveal>
+            <div class="section-head">
+              <span class="section-label">How It Works</span>
+              <h2 class="section-heading">Your Business Is Ready for <em>More.</em></h2>
+              <p class="section-sub">Let's rethink the way you work, create smarter ways to serve your customers, and build solutions that move your business forward.</p>
+            </div>
+            <a href="#contact" class="btn btn-ghost">Start Your Project →</a>
+          </div>
 
-        <div class="process-row" data-reveal>
-          <article class="process-item">
-            <span class="process-step-num">01</span>
-            <h3>Audit &amp; Design</h3>
-            <p>Map operational bottlenecks and architect the exact AI workflows required.</p>
-          </article>
-          <article class="process-item">
-            <span class="process-step-num">02</span>
-            <h3>Build &amp; Connect</h3>
-            <p>Engineer custom AI agents, automations, and supporting web systems.</p>
-          </article>
-          <article class="process-item">
-            <span class="process-step-num">03</span>
-            <h3>Deploy &amp; Scale</h3>
-            <p>Launch into production with clean handoff and room to expand.</p>
-          </article>
+          <div class="process-track">
+            <article class="process-step" data-reveal data-reveal-delay="40ms">
+              <span class="process-step-num mono">01</span>
+              <h3>First, We Get to Know Your Business</h3>
+              <p>We take time to understand your business, how you work, the challenges you face, and where better solutions can make a difference.</p>
+            </article>
+            <article class="process-step" data-reveal data-reveal-delay="120ms">
+              <span class="process-step-num mono">02</span>
+              <h3>Then, We Build What You Need</h3>
+              <p>We turn what we've learned into practical solutions, from websites and smart tools to automated systems designed around your business.</p>
+            </article>
+            <article class="process-step" data-reveal data-reveal-delay="200ms">
+              <span class="process-step-num mono">03</span>
+              <h3>Finally, We Bring It to Life</h3>
+              <p>We launch your solution, make sure everything works as expected, and give your business room to grow and do more.</p>
+            </article>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- =====================================================================
-         OUR WORK — Selected Builds & Demonstrations
+         OUR WORK — Featured Case Study & Selected Prototypes
          ===================================================================== -->
     <section id="work" class="section-block" data-nav-section="work">
       <div class="container">
-        <div class="section-head" data-reveal>
-          <span class="section-label">Our Work</span>
-          <h2 class="section-heading">Selected <em>systems</em> and prototypes.</h2>
+        <div class="section-split-head">
+          <div class="section-head" data-reveal>
+            <span class="section-label">Our Work</span>
+            <h2 class="section-heading">Selected <em>systems</em> and prototypes.</h2>
+          </div>
+          <div class="section-split-aside section-split-aside--right" data-reveal data-reveal-delay="80ms">
+            <a href="projects.html" class="section-link-more">Explore All 5 Systems →</a>
+          </div>
         </div>
 
-        <div class="work-grid">
-          <article class="work-card" data-reveal>
-            <div class="work-media">
-              <img src="images/project-agencyos.jpg" alt="AgencyOS AI-powered agency operations platform" referrerpolicy="no-referrer">
-            </div>
-            <div class="work-body">
-              <div class="work-meta">01 · AI Operations · In Development</div>
-              <h3 class="work-title">AgencyOS</h3>
-              <p class="work-desc">AI-assisted operations platform coordinating client workflows and automation.</p>
-              <button type="button" class="work-inspect-btn" data-open-project="agencyos">Inspect System →</button>
-            </div>
-          </article>
+        <article class="work-featured" data-reveal>
+          <div class="work-media">
+            <img src="images/project-agencyos.jpg" alt="AgencyOS AI-powered agency operations platform" referrerpolicy="no-referrer">
+          </div>
+          <div class="work-body">
+            <div class="work-meta">01 · Featured System · AI Operations</div>
+            <h3 class="work-title">AgencyOS</h3>
+            <p class="work-desc">AI-assisted operations platform coordinating client workflows, task routing, and continuous business automation from one unified workspace.</p>
+            <div class="work-tech-inline">React · TypeScript · REST APIs · Workflow Automation</div>
+            <button type="button" class="work-inspect-btn" data-open-project="agencyos">Inspect System →</button>
+          </div>
+        </article>
 
-          <article class="work-card" data-reveal>
+        <div class="work-strip">
+          <article class="work-card" data-reveal data-reveal-delay="40ms">
             <div class="work-media">
               <img src="images/project-api-abuse.jpg" alt="API Abuse and Bot Detection machine learning system" referrerpolicy="no-referrer">
             </div>
             <div class="work-body">
-              <div class="work-meta">02 · Machine Learning · Anomaly Detection</div>
+              <div class="work-meta">02 · Machine Learning</div>
               <h3 class="work-title">API Abuse &amp; Bot Detection</h3>
               <p class="work-desc">Random Forest classification system identifying automated API abuse in real time.</p>
               <button type="button" class="work-inspect-btn" data-open-project="apiabuse">Inspect System →</button>
             </div>
           </article>
 
-          <article class="work-card" data-reveal>
+          <article class="work-card" data-reveal data-reveal-delay="110ms">
             <div class="work-media">
               <img src="images/project-signal.jpg" alt="SIGNAL real-time dispatch coordination system" referrerpolicy="no-referrer">
             </div>
             <div class="work-body">
-              <div class="work-meta">03 · Real-Time Workflow · Dispatch</div>
+              <div class="work-meta">03 · Real-Time Dispatch</div>
               <h3 class="work-title">SIGNAL</h3>
               <p class="work-desc">Real-time incident reporting, location sharing, and responder coordination.</p>
               <button type="button" class="work-inspect-btn" data-open-project="signal">Inspect System →</button>
             </div>
           </article>
 
-          <article class="work-card" data-reveal>
+          <article class="work-card" data-reveal data-reveal-delay="180ms">
             <div class="work-media">
               <img src="images/project-wisdomkitchen.jpg" alt="WisdomKitchen digital restaurant ordering platform" referrerpolicy="no-referrer">
             </div>
             <div class="work-body">
-              <div class="work-meta">04 · Hospitality · Web Infrastructure</div>
+              <div class="work-meta">04 · Hospitality Infrastructure</div>
               <h3 class="work-title">WisdomKitchen</h3>
               <p class="work-desc">Digital restaurant ordering workflow connecting menus directly to kitchen fulfillment.</p>
               <button type="button" class="work-inspect-btn" data-open-project="wisdomkitchen">Inspect System →</button>
@@ -393,7 +414,7 @@
             <p id="copy-email-status" class="copy-status" aria-live="polite"></p>
           </div>
 
-          <div class="contact-card" data-reveal>
+          <div class="contact-card" data-reveal data-reveal-delay="100ms">
             <form id="contact-form" class="contact-form" novalidate>
               <div class="form-field">
                 <label for="contact-name" class="form-label">Name</label>
@@ -455,6 +476,8 @@
         <a href="#industries">Industries</a>
         <a href="#process">How It Works</a>
         <a href="projects.html">Our Work</a>
+        <a href="about.html">About</a>
+        <a href="skills.html">Capabilities</a>
         <a href="contact.html">Contact</a>
       </div>
 

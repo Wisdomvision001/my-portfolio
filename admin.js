@@ -1,11 +1,35 @@
+import {
+  auth,
+  getCurrentAdminIdToken,
+  signInAdminWithGoogle,
+  signOutAdmin,
+  subscribeAdminAuthState,
+  syncAdminProfileAndAudit
+} from './public/admin-firebase.bundle.js';
+
 (() => {
   const loginView = document.getElementById('admin-login-view');
   const appView = document.getElementById('admin-app-view');
-  const loginForm = document.getElementById('admin-login-form');
+  const googleSignInBtn = document.getElementById('firebase-google-signin-btn');
   const loginError = document.getElementById('admin-login-error');
-  const loginBtn = document.getElementById('admin-login-btn');
+  const adminUserEmailEl = document.getElementById('admin-user-email');
   const logoutBtn = document.getElementById('logout-btn');
   const exportBtn = document.getElementById('export-csv-btn');
+
+  async function adminFetch(url, options = {}) {
+    const headers = new Headers(options.headers || {});
+    if (!headers.has('Authorization')) {
+      const token = await getCurrentAdminIdToken().catch(() => null);
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+    }
+    return fetch(url, {
+      ...options,
+      headers,
+      credentials: 'same-origin'
+    });
+  }
 
   const viewTabs = Array.from(document.querySelectorAll('.view-tab'));
   const viewLeads = document.getElementById('view-leads');
@@ -72,10 +96,21 @@
       .replace(/'/g, '&#39;');
   }
 
+  function setSignedInEmail(email) {
+    if (!adminUserEmailEl) return;
+    if (email) {
+      adminUserEmailEl.textContent = email;
+      adminUserEmailEl.hidden = false;
+    } else {
+      adminUserEmailEl.textContent = '';
+      adminUserEmailEl.hidden = true;
+    }
+  }
+
   function showAuthGate() {
     appView.hidden = true;
     loginView.hidden = false;
-    document.getElementById('admin-access-key')?.focus();
+    googleSignInBtn?.focus();
   }
 
   function showWorkspace() {
@@ -244,8 +279,8 @@
     if (searchQuery.trim()) params.set('search', searchQuery.trim());
 
     try {
-      const resp = await fetch(`/api/admin/leads?${params.toString()}`);
-      if (resp.status === 401) {
+      const resp = await adminFetch(`/api/admin/leads?${params.toString()}`);
+      if (resp.status === 401 || resp.status === 403) {
         showAuthGate();
         return;
       }
@@ -278,8 +313,8 @@
 
   async function loadMetrics() {
     try {
-      const resp = await fetch('/api/admin/metrics');
-      if (resp.status === 401) {
+      const resp = await adminFetch('/api/admin/metrics');
+      if (resp.status === 401 || resp.status === 403) {
         showAuthGate();
         return;
       }
@@ -318,8 +353,8 @@
 
   async function loadEmailStatus(forceRefresh = false) {
     try {
-      const resp = await fetch(`/api/admin/email-status${forceRefresh ? '?refresh=1' : ''}`);
-      if (resp.status === 401) {
+      const resp = await adminFetch(`/api/admin/email-status${forceRefresh ? '?refresh=1' : ''}`);
+      if (resp.status === 401 || resp.status === 403) {
         showAuthGate();
         return;
       }
@@ -410,44 +445,74 @@
     }
   }
 
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    loginError.textContent = '';
-    const keyInput = document.getElementById('admin-access-key');
-    const accessKey = (keyInput.value || '').trim();
-    if (!accessKey) {
-      loginError.textContent = 'Please enter the admin access key.';
-      return;
-    }
+  async function exchangeFirebaseSession(idToken) {
+    const resp = await fetch('/api/admin/firebase-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ idToken })
+    });
+    const data = await resp.json().catch(() => ({}));
+    return { resp, data };
+  }
 
-    loginBtn.disabled = true;
-    loginBtn.textContent = 'Verifying...';
+  function formatFirebaseAuthError(err) {
+    const code = String(err?.code || '');
+    if (code === 'auth/popup-closed-by-user') {
+      return 'Google sign-in popup was closed before completing authentication.';
+    }
+    if (code === 'auth/popup-blocked') {
+      return 'Popup was blocked by your browser. Please allow popups for this site and try again.';
+    }
+    if (code === 'auth/cancelled-popup-request') {
+      return 'Sign-in request was cancelled. Please try again.';
+    }
+    if (code === 'auth/unauthorized-domain') {
+      return 'This domain is not yet allowlisted in Firebase Authentication settings.';
+    }
+    return err?.message || 'Unable to complete Firebase Google authentication.';
+  }
+
+  const defaultGoogleBtnHtml = googleSignInBtn ? googleSignInBtn.innerHTML : '';
+
+  googleSignInBtn?.addEventListener('click', async () => {
+    loginError.textContent = '';
+    googleSignInBtn.disabled = true;
+    const labelSpan = googleSignInBtn.querySelector('span');
+    if (labelSpan) labelSpan.textContent = 'Signing in with Google...';
+
     try {
-      const resp = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accessKey })
-      });
-      const data = await resp.json().catch(() => ({}));
+      const { user, idToken } = await signInAdminWithGoogle();
+      const { resp, data } = await exchangeFirebaseSession(idToken);
       if (!resp.ok) {
-        loginError.textContent = data.error || 'Authentication failed.';
+        await signOutAdmin().catch(() => {});
+        setSignedInEmail('');
+        loginError.textContent = data.error || 'This Google account is not authorized for admin access.';
         return;
       }
-      keyInput.value = '';
+
+      setSignedInEmail(data.admin?.email || user.email || '');
       showWorkspace();
       await Promise.all([loadLeads(), loadMetrics(), loadEmailStatus()]);
-    } catch {
-      loginError.textContent = 'Unable to connect to authentication service.';
+      void syncAdminProfileAndAudit(user, 'login').catch(() => {});
+    } catch (err) {
+      loginError.textContent = formatFirebaseAuthError(err);
     } finally {
-      loginBtn.disabled = false;
-      loginBtn.textContent = 'Sign In';
+      googleSignInBtn.disabled = false;
+      if (defaultGoogleBtnHtml) googleSignInBtn.innerHTML = defaultGoogleBtnHtml;
     }
   });
 
   logoutBtn.addEventListener('click', async () => {
-    await fetch('/api/admin/logout', { method: 'POST' }).catch(() => {});
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      await syncAdminProfileAndAudit(currentUser, 'logout').catch(() => {});
+    }
+    await signOutAdmin().catch(() => {});
+    await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' }).catch(() => {});
     selectedRef = null;
     leads = [];
+    setSignedInEmail('');
     showAuthGate();
   });
 
@@ -523,12 +588,12 @@
     detSaveStatus.classList.remove('is-error');
 
     try {
-      const resp = await fetch(`/api/admin/leads/${encodeURIComponent(selectedRef)}`, {
+      const resp = await adminFetch(`/api/admin/leads/${encodeURIComponent(selectedRef)}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status, followUpNotes })
       });
-      if (resp.status === 401) {
+      if (resp.status === 401 || resp.status === 403) {
         showAuthGate();
         return;
       }
@@ -562,10 +627,10 @@
 
     detDeleteBtn.disabled = true;
     try {
-      const resp = await fetch(`/api/admin/leads/${encodeURIComponent(selectedRef)}`, {
+      const resp = await adminFetch(`/api/admin/leads/${encodeURIComponent(selectedRef)}`, {
         method: 'DELETE'
       });
-      if (resp.status === 401) {
+      if (resp.status === 401 || resp.status === 403) {
         showAuthGate();
         return;
       }
@@ -584,8 +649,8 @@
     runBenchmarkBtn.disabled = true;
     runBenchmarkBtn.textContent = 'Running...';
     try {
-      const resp = await fetch('/api/admin/benchmark', { method: 'POST' });
-      if (resp.status === 401) {
+      const resp = await adminFetch('/api/admin/benchmark', { method: 'POST' });
+      if (resp.status === 401 || resp.status === 403) {
         showAuthGate();
         return;
       }
@@ -611,13 +676,47 @@
     }
   });
 
+  let workspaceBootstrapped = false;
+
+  async function enterAuthenticatedWorkspace(email) {
+    setSignedInEmail(email || '');
+    showWorkspace();
+    if (!workspaceBootstrapped) {
+      workspaceBootstrapped = true;
+      await Promise.all([loadLeads(), loadMetrics(), loadEmailStatus()]);
+    }
+  }
+
+  subscribeAdminAuthState((user) => {
+    if (user && !workspaceBootstrapped) {
+      void (async () => {
+        try {
+          const idToken = await user.getIdToken();
+          const { resp, data } = await exchangeFirebaseSession(idToken);
+          if (resp.ok) {
+            await enterAuthenticatedWorkspace(data.admin?.email || user.email || '');
+            return;
+          }
+          await signOutAdmin().catch(() => {});
+          loginError.textContent = data.error || 'This Google account is not authorized for admin access.';
+        } catch {
+          // Leave on auth gate
+        }
+        showAuthGate();
+      })();
+    } else if (!user && workspaceBootstrapped) {
+      workspaceBootstrapped = false;
+      setSignedInEmail('');
+      showAuthGate();
+    }
+  });
+
   (async function bootstrap() {
     try {
-      const resp = await fetch('/api/admin/session');
+      const resp = await adminFetch('/api/admin/session');
       const data = await resp.json().catch(() => ({}));
       if (data.authenticated) {
-        showWorkspace();
-        await Promise.all([loadLeads(), loadMetrics(), loadEmailStatus()]);
+        await enterAuthenticatedWorkspace(data.admin?.email || auth.currentUser?.email || '');
       } else {
         showAuthGate();
       }

@@ -1,0 +1,104 @@
+{
+  "entities": {
+    "AdminProfile": {
+      "title": "AdminProfile",
+      "description": "Authorized Wisdom Audi Universe administrator record keyed by Firebase Auth UID.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the administrator.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Verified administrator email address.",
+          "minLength": 3,
+          "maxLength": 160
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Administrator display name.",
+          "minLength": 0,
+          "maxLength": 120
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin"],
+          "description": "Administrator access role."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the admin record was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the admin record was last updated."
+        },
+        "lastLoginAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of most recent verified sign-in."
+        }
+      },
+      "required": ["uid", "email", "role", "createdAt", "updatedAt"]
+    },
+    "AdminAuthEvent": {
+      "title": "AdminAuthEvent",
+      "description": "Immutable Firebase admin authentication audit event.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the signed-in admin.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Verified administrator email address.",
+          "minLength": 3,
+          "maxLength": 160
+        },
+        "action": {
+          "type": "string",
+          "enum": ["login", "logout"],
+          "description": "Authentication lifecycle action."
+        },
+        "userAgent": {
+          "type": "string",
+          "description": "Truncated browser user-agent summary.",
+          "minLength": 0,
+          "maxLength": 240
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of the authentication event."
+        }
+      },
+      "required": ["uid", "email", "action", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/admins/{adminUid}": {
+      "schema": {
+        "$ref": "#/entities/AdminProfile"
+      },
+      "description": "Authorized Wisdom Audi Universe administrator profiles and role records."
+    },
+    "/adminAuditLogs/{logId}": {
+      "schema": {
+        "$ref": "#/entities/AdminAuthEvent"
+      },
+      "description": "Immutable audit trail of Firebase admin authentication events."
+    }
+  }
+}

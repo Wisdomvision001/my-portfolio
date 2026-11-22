@@ -4,16 +4,26 @@
   "private": true,
   "type": "module",
   "description": "WISDOM AUDI UNIVERSE — Software Developer, Frontend Engineer & Web Application Developer Portfolio",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "build": "node -e \"console.log('Static portfolio ready for deployment')\"",
-    "lint": "node -e \"const fs = require('fs'); ['index.html','styles.css','script.js','server.js'].forEach(f => { if (!fs.existsSync(f)) throw new Error('Missing ' + f); }); console.log('Static assets verified')\"",
+    "build": "esbuild src/admin-firebase.ts --bundle --minify --format=esm --platform=browser --outfile=public/admin-firebase.bundle.js && node -e \"console.log('Firebase admin bundle and static assets ready')\"",
+    "lint": "node -e \"const fs = require('fs'); ['index.html','styles.css','script.js','server.js','admin.html','admin.js','public/admin-firebase.bundle.js'].forEach(f => { if (!fs.existsSync(f)) throw new Error('Missing ' + f); }); console.log('Static assets verified')\" && eslint firestore.rules",
     "test:notifications": "node scripts/test-lead-notifications.js"
   },
   "dependencies": {
     "@google/genai": "^3.6.0",
+    "esbuild": "^0.28.2",
     "express": "^5.3.0",
+    "firebase": "^13.4.0",
+    "firebase-admin": "^14.5.1",
     "nodemailer": "^10.6.0"
+  },
+  "devDependencies": {
+    "@firebase/eslint-plugin-security-rules": "^0.0.2",
+    "eslint": "^10.15.0"
   }
 }

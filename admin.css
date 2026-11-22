@@ -98,6 +98,22 @@ body {
   margin-top: 4px;
 }
 
+.btn-google {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  font-weight: 600;
+}
+
+.auth-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
 .auth-footer {
   padding-top: 12px;
   border-top: 1px solid var(--border);
@@ -198,6 +214,17 @@ body {
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+}
+
+.topbar-user {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-soft);
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  white-space: nowrap;
 }
 
 /* Main Workspace */

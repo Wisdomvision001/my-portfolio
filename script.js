@@ -5,48 +5,39 @@
 (function () {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 1. Entrance animation cleanup + rAF fallback so content is never hidden
+  // 1. Entrance animation cleanup + timing-aware safety fallback (never kills delayed mobile animations)
   const appearEls = document.querySelectorAll('.appear');
   const heroAtmo = document.querySelector('.hero-atmosphere');
 
-  appearEls.forEach((el) => {
-    el.addEventListener(
-      'animationend',
-      () => {
-        el.classList.add('is-in');
-      },
-      { once: true }
-    );
-  });
-
-  if (heroAtmo) {
-    heroAtmo.addEventListener(
-      'animationend',
-      () => {
-        heroAtmo.classList.add('is-in');
-      },
-      { once: true }
-    );
-  }
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      appearEls.forEach((el) => {
-        const anims = typeof el.getAnimations === 'function' ? el.getAnimations() : [];
-        const active = anims.some((a) => a.playState === 'running' || a.playState === 'finished');
-        if (!active) {
+  if (prefersReducedMotion) {
+    appearEls.forEach((el) => el.classList.add('is-in'));
+    if (heroAtmo) heroAtmo.classList.add('is-in');
+  } else {
+    appearEls.forEach((el) => {
+      el.addEventListener(
+        'animationend',
+        () => {
           el.classList.add('is-in');
-        }
-      });
-      if (heroAtmo) {
-        const anims = typeof heroAtmo.getAnimations === 'function' ? heroAtmo.getAnimations() : [];
-        const active = anims.some((a) => a.playState === 'running' || a.playState === 'finished');
-        if (!active) {
-          heroAtmo.classList.add('is-in');
-        }
-      }
+        },
+        { once: true }
+      );
+      const delayStr = el.style.getPropertyValue('--d') || getComputedStyle(el).animationDelay || '0s';
+      const delayMs = parseFloat(delayStr) * (delayStr.includes('ms') ? 1 : 1000) || 0;
+      window.setTimeout(() => {
+        el.classList.add('is-in');
+      }, Math.max(1600, Math.round(delayMs + 1600)));
     });
-  });
+
+    if (heroAtmo) {
+      heroAtmo.addEventListener(
+        'animationend',
+        () => {
+          heroAtmo.classList.add('is-in');
+        },
+        { once: true }
+      );
+    }
+  }
 
   // 2. Mobile menu toggle, Escape & resize close
   const burger = document.getElementById('menu-toggle');
@@ -116,8 +107,9 @@
     updateProgress();
   }
 
-  // 4. Scroll-triggered [data-reveal] observer
+  // 4. Scroll-triggered [data-reveal] observer (mobile-safe low threshold + scroll/touch fallback)
   const revealEls = document.querySelectorAll('[data-reveal]');
+  let refreshReveals = () => {};
   if (revealEls.length) {
     if (prefersReducedMotion) {
       revealEls.forEach((el) => el.classList.add('in'));
@@ -128,6 +120,10 @@
 
       const revealEl = (el) => {
         if (!pending.has(el)) return;
+        const delayAttr = el.getAttribute('data-reveal-delay');
+        if (delayAttr) {
+          el.style.setProperty('--rd', delayAttr);
+        }
         el.classList.add('in');
         pending.delete(el);
         if (observer) observer.unobserve(el);
@@ -135,7 +131,9 @@
 
       const cleanup = () => {
         window.removeEventListener('scroll', onRevealScroll);
+        window.removeEventListener('touchmove', onRevealScroll);
         window.removeEventListener('resize', onRevealScroll);
+        window.removeEventListener('hashchange', onRevealScroll);
         if (observer) {
           observer.disconnect();
           observer = null;
@@ -144,11 +142,13 @@
 
       const checkElementsInViewport = () => {
         revealTicking = false;
-        const vh = window.innerHeight || document.documentElement.clientHeight;
-        const trigger = vh - 24;
+        const vh = window.innerHeight || document.documentElement.clientHeight || 800;
+        const trigger = vh - 12;
         pending.forEach((el) => {
+          if (el.offsetParent === null && getComputedStyle(el).display === 'none') return;
           const rect = el.getBoundingClientRect();
-          if (rect.top <= trigger && rect.bottom >= 0) {
+          if (rect.height === 0 && rect.width === 0) return;
+          if (rect.top <= trigger) {
             revealEl(el);
           }
         });
@@ -162,22 +162,28 @@
         }
       };
 
+      refreshReveals = checkElementsInViewport;
+
       if ('IntersectionObserver' in window) {
         observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
-              if (entry.isIntersecting) revealEl(entry.target);
+              if (entry.isIntersecting || entry.boundingClientRect.top <= (window.innerHeight || 800) - 12) {
+                revealEl(entry.target);
+              }
             });
             if (pending.size === 0) cleanup();
           },
-          { threshold: 0.08, rootMargin: '0px 0px -24px 0px' }
+          { threshold: 0.01, rootMargin: '0px 0px -12px 0px' }
         );
         pending.forEach((el) => observer.observe(el));
       }
 
       window.addEventListener('scroll', onRevealScroll, { passive: true });
+      window.addEventListener('touchmove', onRevealScroll, { passive: true });
       window.addEventListener('resize', onRevealScroll, { passive: true });
-      checkElementsInViewport();
+      window.addEventListener('hashchange', onRevealScroll, { passive: true });
+      requestAnimationFrame(checkElementsInViewport);
     }
   }
 
@@ -251,7 +257,7 @@
         const coreDot = node.core ? '<span class="bp-core-dot"></span>' : '';
         const coreRing = node.core ? CORE_SVG : '';
         const nodeHtml = `
-          <div class="bp-node${node.core ? ' bp-node--core' : ''}">
+          <div class="bp-node${node.core ? ' bp-node--core' : ''}" style="--nd:${idx * 70}ms">
             ${coreRing}
             <div class="bp-node-head"><span class="bp-node-step">${node.step}</span>${coreDot}</div>
             <strong class="bp-node-title">${node.title}</strong>
@@ -352,12 +358,17 @@
   };
 
   const indTabs = document.querySelectorAll('[data-industry]');
+  const indCard = document.getElementById('industry-spotlight-card');
   const indKicker = document.getElementById('ind-kicker');
   const indTitle = document.getElementById('ind-title');
   const indDesc = document.getElementById('ind-desc');
   const indSystems = document.getElementById('ind-systems');
+  const indCta = document.getElementById('ind-cta');
 
   if (indTabs.length && indTitle) {
+    let activeIndustryTitle = INDUSTRIES_DATA.retail.kicker;
+    let indTimer = null;
+
     indTabs.forEach((btn) => {
       btn.addEventListener('click', () => {
         const data = INDUSTRIES_DATA[btn.dataset.industry];
@@ -367,10 +378,67 @@
           b.classList.toggle('active', active);
           b.setAttribute('aria-selected', String(active));
         });
-        if (indKicker) indKicker.textContent = data.kicker;
-        indTitle.textContent = data.title;
-        if (indDesc) indDesc.textContent = data.desc;
-        if (indSystems) indSystems.textContent = data.systems;
+
+        if (window.innerWidth <= 900 && typeof btn.scrollIntoView === 'function') {
+          btn.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
+        }
+
+        activeIndustryTitle = `${data.kicker} — ${data.title}`;
+
+        const applyIndustryContent = () => {
+          if (indKicker) indKicker.textContent = data.kicker;
+          indTitle.textContent = data.title;
+          if (indDesc) indDesc.textContent = data.desc;
+          if (indSystems) indSystems.textContent = data.systems;
+        };
+
+        if (prefersReducedMotion || !indCard) {
+          applyIndustryContent();
+          return;
+        }
+
+        if (indTimer) window.clearTimeout(indTimer);
+        indCard.classList.add('is-switching');
+        indTimer = window.setTimeout(() => {
+          applyIndustryContent();
+          requestAnimationFrame(() => {
+            indCard.classList.remove('is-switching');
+          });
+        }, 120);
+      });
+    });
+
+    if (indCta) {
+      indCta.addEventListener('click', () => {
+        const subjectField = document.getElementById('contact-subject');
+        if (subjectField) {
+          subjectField.value = activeIndustryTitle;
+        }
+      });
+    }
+  }
+
+  // 6b. Optional Project Category Filtering (projects.html)
+  const filterBtns = document.querySelectorAll('.work-filter-btn[data-filter]');
+  const filterItems = document.querySelectorAll('[data-project-cat]');
+  if (filterBtns.length && filterItems.length) {
+    filterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const cat = btn.dataset.filter || 'all';
+        filterBtns.forEach((b) => {
+          const active = b === btn;
+          b.classList.toggle('active', active);
+          b.setAttribute('aria-pressed', String(active));
+        });
+        filterItems.forEach((card) => {
+          const cats = (card.dataset.projectCat || '').split(/\s+/);
+          const show = cat === 'all' || cats.includes(cat);
+          card.hidden = !show;
+          if (show && card.hasAttribute('data-reveal')) {
+            card.classList.add('in');
+          }
+        });
+        refreshReveals();
       });
     });
   }
